@@ -46,6 +46,6 @@ interface INxpNfcAdapter
     IeSEClientServicesAdapter getNfcEseClientServicesAdapterInterface();
     int getSeInterface(int type);
     byte[]  getFWVersion();
-    int[] getActiveSecureElementList(String pkg);
     Map getServicesAidCacheSize(int userId, String category);
+    int[] getActiveSecureElementList(String pkg);
 }

@@ -250,7 +250,7 @@ public class NxpNfcController {
         }
         ApduServiceInfo.ESeInfo mEseInfo = new ApduServiceInfo.ESeInfo(seId,powerstate);
         apduService = new ApduServiceInfo(resolveInfo,onHost,description,staticAidGroups, dynamicAidGroup,
-                                           requiresUnlock,bannerId,userId,mEseInfo,null, DrawableResource, modifiable);
+                                           requiresUnlock,bannerId,userId, "Fixme: NXP:<Activity Name>", mEseInfo,null, DrawableResource, modifiable);
         return apduService;
     }
 
@@ -390,7 +390,7 @@ public class NxpNfcController {
 
         ApduServiceInfo.ESeInfo mEseInfo = new ApduServiceInfo.ESeInfo(seId,powerstate);
         ApduServiceInfo newService = new ApduServiceInfo(resolveInfo, onHost, description, staticAidGroups, dynamicAidGroup,
-                                                         requiresUnlock, bannerResId, userId, mEseInfo,
+                                                         requiresUnlock, bannerResId, userId, "Fixme: NXP:<Activity Name>", mEseInfo,
                                                          null, DrawableResource, modifiable);
 
         mSeNameApduService.put(seName, newService);

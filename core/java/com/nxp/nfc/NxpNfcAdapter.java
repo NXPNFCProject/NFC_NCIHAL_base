@@ -25,13 +25,14 @@ import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.util.Map;
 import android.nfc.INfcAdapter;
 import android.nfc.NfcAdapter;
 import android.nfc.INfcAdapterExtras;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ServiceManager;
-import java.util.Map;
+
 import java.io.IOException;
 import android.os.RemoteException;
 import com.nxp.nfc.gsma.internal.INxpNfcController;
@@ -89,6 +90,7 @@ public final class NxpNfcAdapter {
         }
 
         return nxpAdapter;
+
     }
 
     /** get handle to NFC service interface */
