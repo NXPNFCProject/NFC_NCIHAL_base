@@ -8,7 +8,7 @@
 
 | DESCRIPTION        | CHECKOUT COMMAND          |
 | :-------------: |:-------------:| 
-| NFCNCIHAL_base    |  git clone https://github.com/NXPNFCProject/NFCNCIHAL_base.git |
+| NFCNCIHAL_base    |  git clone https://github.com/NXPNFCProject/NFC_NCIHAL_base.git |
 
 ####Supported Versions on "master" Branch
 
