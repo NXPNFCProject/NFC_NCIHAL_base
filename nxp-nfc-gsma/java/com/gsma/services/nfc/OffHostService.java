@@ -35,6 +35,7 @@ public class OffHostService {
 
     protected OffHostService(int userId, String description, String SELocation,String packageName,
                              String serviceName, boolean modifiable) {
+        mBannerResId = 0x00;
         mUserId = userId;
         mDescription = description;
         mSEName  = SELocation;
@@ -127,12 +128,24 @@ public class OffHostService {
             }
         } catch (Exception e) {
             Log.d(TAG, "setBanner() Resources exception ..." + e.getMessage());
+
+        }
+        if(mBannerResId == 0x00) {
+            Log.d(TAG, "bannerId  set to 0");
+            mBannerResId = -1;
+            mBanner = banner;
         }
     }
 
-
-/*    //Set a banner for the "Off-Host" service.
-    private void setBannerResId(int bannerResId){
+    /**
+     * Set a banner for the "Off-Host" service.
+     * @param resourceId The desired resource identifier.
+     * <LI> The value 0 is an invalid identifier </LI>
+     * @exception Resources.NotFoundException <BR>Indicate that the given resourceId does not exist.
+     * @since NFCHST8.0
+     */
+      //Set a banner for the "Off-Host" service.
+    public void setBannerResId(int bannerResId){
         Log.d(TAG, "setBannerResId() with " + String.valueOf(bannerResId));
         mBannerResId = bannerResId;
 
@@ -146,7 +159,7 @@ public class OffHostService {
                 Log.e(TAG, "Exception : " + e.getMessage());
             }
         }
-    }*/
+    }
 
     /**
      * Get a modifiable for dynamic "Off-Host" service.
@@ -223,7 +236,7 @@ public class OffHostService {
         ArrayList<android.nfc.cardemulation.AidGroup> mAidGroupList = convertToCeAidGroupList(service.mAidGroupList);
         NxpOffHostService mNxpOffHostService = new NxpOffHostService(service.mUserId,service.mDescription, service.mSEName, service.mPackageName, service.mServiceName,
                                                                      service.mModifiable);
-        //mNxpOffHostService.setBanner(service.mBanner);
+        mNxpOffHostService.setBanner(service.mBanner);
         mNxpOffHostService.setBannerId(service.mBannerResId);
         mNxpOffHostService.mAidGroupList.addAll(mAidGroupList);
         return mNxpOffHostService;

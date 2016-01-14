@@ -34,6 +34,7 @@ import android.os.IBinder;
 import android.os.ServiceManager;
 
 import java.io.IOException;
+import android.os.UserHandle;
 import android.os.RemoteException;
 import com.nxp.nfc.gsma.internal.INxpNfcController;
 
@@ -543,6 +544,35 @@ public final class NxpNfcAdapter {
         }
     }
 
+    /**
+     * This api is called by applications to update the service state of card emualation
+     * services.
+     * <p>This api is implemented for  {@link android.nfc.cardemulation.CardEmulation#CATEGORY_OTHER}.
+     * <p>Requires {@link android.Manifest.permission#NFC} permission.<ul>
+     * <li>This api should be called only when the intent AID routing
+     *     table full is sent by NfcService.
+     * <li>The service state change is persistent for particular UserId.
+     * <li>The service state is written to the Xml and read
+     *     before every routing table  change.
+     * <li>If there is any change in routing table  the routing table is updated to NFCC
+     *     after calling this api.
+     * </ul>
+     * @param  serviceState Map of ServiceName and state of service.
+     * @return whether  the update of Card Emulation services is
+     *          success or not.
+     *          0xFF - failure
+     *          0x00 - success
+     * @throws  IOException if any exception occurs during the service state change.
+     */
+    public int updateServiceState(Map<String , Boolean> serviceState) throws IOException{
+        try {
+            return sNxpService.updateServiceState(UserHandle.myUserId() , serviceState);
+        }catch(RemoteException e)
+        {
+            e.printStackTrace();
+            return 0xFF;
+        }
+    }
      /**
      * @hide
      */

@@ -154,6 +154,12 @@ public final class ApduServiceInfo implements Parcelable {
     final boolean mModifiable;
 
     /**
+     * This says whether the Service is enabled or disabled by the user
+     * By default it is enabled.This is only applicable for OTHER category.
+     *
+     */
+    boolean mServiceState;
+    /**
      * The uid of the package the service belongs to
      */
     final int mUid;
@@ -192,6 +198,7 @@ public final class ApduServiceInfo implements Parcelable {
         this.mNfcid2CategoryToGroup = new HashMap<String, Nfcid2Group>();
         this.mOnHost = onHost;
         this.mRequiresDeviceUnlock = requiresUnlock;
+        this.mServiceState = true;
         if(staticAidGroups != null) {
             for (AidGroup aidGroup : staticAidGroups) {
                 this.mStaticAidGroups.put(aidGroup.category, aidGroup);
@@ -219,6 +226,7 @@ public final class ApduServiceInfo implements Parcelable {
             throws XmlPullParserException, IOException {
         this.mBanner = null;
         this.mModifiable = false;
+        this.mServiceState = true;
         ServiceInfo si = info.serviceInfo;
         XmlResourceParser parser = null;
         XmlResourceParser extParser = null;
@@ -535,6 +543,92 @@ public final class ApduServiceInfo implements Parcelable {
         return aids;
     }
 
+
+    /**
+     * This api can be used to find the total aid size registered
+     * by this service.
+     * <p> This returns the size of only {@link #CardEmulation.CATEGORY_OTHER}.
+     * <p> This includes both static and dynamic aid groups
+     * @param category The category of the corresponding service.{@link #CardEmulation.CATEGORY_OTHER}.
+     * @return The aid cache size for particular category.
+     */
+    public int getAidCacheSize(String category) {
+        int aidSize = 0x00;
+        if(!CardEmulation.CATEGORY_OTHER.equals(category) || !hasCategory(CardEmulation.CATEGORY_OTHER)) {
+            return 0x00;
+        }
+        aidSize = getAidCacheSizeForCategory(CardEmulation.CATEGORY_OTHER);
+        return aidSize;
+    }
+
+    private int getAidCacheSizeForCategory(String category) {
+        ArrayList<AidGroup> aidGroups = new ArrayList<AidGroup>();
+        List<String> aids;
+        int aidCacheSize = 0x00;
+        int aidLen = 0x00;
+        aidGroups.addAll(getStaticAidGroups());
+        aidGroups.addAll(getDynamicAidGroups());
+        if(aidGroups == null || aidGroups.size() == 0x00) {
+            return aidCacheSize;
+        }
+        for(AidGroup aidCache : aidGroups) {
+            if(!aidCache.getCategory().equals(category)) {
+                continue;
+            }
+            aids = aidCache.getAids();
+            if (aids == null || aids.size() == 0) {
+                continue;
+            }
+            for(String aid : aids) {
+                aidLen = aid.length();
+                if(aid.endsWith("*")) {
+                    aidLen = aidLen - 1;
+                }
+                aidCacheSize += aidLen >> 1;
+            }
+        }
+        return aidCacheSize;
+    }
+    /**
+     * This api can be used to find the total aids count registered
+     * by this service.
+     * <p> This returns the size of only {@link #CardEmulation.CATEGORY_OTHER}.
+     * <p> This includes both static and dynamic aid groups
+     * @param category The category of the corresponding service.{@link #CardEmulation.CATEGORY_OTHER}.
+     * @return The num of aids corresponding to particular cateogry
+     */
+    public int geTotalAidNum ( String category) {
+        int aidTotalNum = 0x00;
+        if(!CardEmulation.CATEGORY_OTHER.equals(category) || !hasCategory(CardEmulation.CATEGORY_OTHER)) {
+            return 0x00;
+        }
+        aidTotalNum = getTotalAidNumCategory(CardEmulation.CATEGORY_OTHER);
+        return aidTotalNum;
+    }
+
+    private int getTotalAidNumCategory( String category) {
+        ArrayList<AidGroup> aidGroups = new ArrayList<AidGroup>();
+        List<String> aids;
+        int aidTotalNum = 0x00;
+        aidGroups.addAll(getStaticAidGroups());
+        aidGroups.addAll(getDynamicAidGroups());
+        if(aidGroups == null || aidGroups.size() == 0x00) {
+            return aidTotalNum;
+        }
+        for(AidGroup aidCache : aidGroups) {
+            if(!aidCache.getCategory().equals(category)) {
+                continue;
+            }
+            aids = aidCache.getAids();
+            if (aids == null || aids.size() == 0) {
+                continue;
+            }
+            for(String aid : aids) {
+                if(aid != null && aid.length() > 0x00) { aidTotalNum++;}
+            }
+        }
+        return aidTotalNum;
+    }
     public List<String> getPrefixAids() {
         final ArrayList<String> prefixAids = new ArrayList<String>();
         for (AidGroup group : getAidGroups()) {
@@ -830,6 +924,20 @@ public final class ApduServiceInfo implements Parcelable {
             return new ApduServiceInfo[size];
         }
     };
+
+    public boolean getServiceState(String category) {
+        if(category != CardEmulation.CATEGORY_OTHER) {
+            return true;
+        }
+        return mServiceState;
+    }
+
+    public void setServiceState(String category ,boolean state) {
+        if(category != CardEmulation.CATEGORY_OTHER) {
+            return;
+        }
+        mServiceState = state;
+    }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("    " + getComponent() +

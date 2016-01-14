@@ -48,4 +48,5 @@ interface INxpNfcAdapter
     byte[]  getFWVersion();
     Map getServicesAidCacheSize(int userId, String category);
     int[] getActiveSecureElementList(String pkg);
+    int updateServiceState(int userId , in Map serviceState);
 }

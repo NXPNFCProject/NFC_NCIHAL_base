@@ -24,7 +24,10 @@ import android.nfc.NfcAdapter;
 import com.nxp.nfc.NxpNfcAdapter;
 import android.content.Context;
 import java.lang.reflect.Method;
-
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.io.IOException;
 /**
  * This class handles the handset configuration & properties
  */
@@ -49,7 +52,8 @@ public class NxpHandset {
     private static final int BATTERY_LOW_MODE=0x90;
     /** Device property [Battery levels]*/
     private static final int BATTERY_POWER_OFF_MODE=0x91;
-
+    /** Device property [Battery levels]*/
+    private static final int BATTERY_OPERATIONAL_MODE=0x92;
     private String TAG = "NxpHandset";
 
     private NfcAdapter mNfcAdapter = null;
@@ -59,7 +63,7 @@ public class NxpHandset {
 
 
 
-    private final int GSMA_NFCHST = 6000;
+    private final int GSMA_NFCHST = 8000;
 
     public NxpHandset() {
         mContext = getContext();
@@ -128,6 +132,30 @@ public class NxpHandset {
         return result;
     }
 
+    public List<String> getAvailableSecureElements(int batteryLevel) {
+        String pkg = mContext.getPackageName();
+        String[] secureElemArray = null;
+        List<String> secureElementList = new ArrayList<String>(0x03);
+        switch(batteryLevel) {
+
+        case BATTERY_LOW_MODE:
+        case BATTERY_POWER_OFF_MODE:
+        case BATTERY_OPERATIONAL_MODE:
+            try {
+                secureElemArray = mNxpNfcAdapter.getActiveSecureElementList(pkg);
+            } catch(IOException e) {
+                secureElemArray = null;
+            }
+            break;
+        default:
+            break;
+        }
+        if(secureElemArray != null && secureElemArray.length > 0x00) {
+            Collections.addAll(secureElementList , secureElemArray);
+            return secureElementList;
+        }
+        return Collections.emptyList();
+    }
     /**
      * Asks the system to inform "transaction events" to any authorized/registered components via <code>BroadcastReceiver</code>.<BR>
      * Change SHALL not imply a power cycle and SHALL be valid until next handset reboot.<BR><BR>

@@ -41,11 +41,11 @@ public final class NfcDta {
      ** This call allows SNEP to be tested against nfc forum test cases.
      * @param cmdType  This parameter is used to give the following commands.
      *  enabledta :- this will enable  dta mode flag in the nfcservice for testing.
-     *  enableserver:- this will start the extended dta server having service name “urn:nfc:sn:sneptest”.
+     *  enableserver:- this will start the extended dta server having service name "urn:nfc:sn:sneptest".
      *  disableserver :- this will disable the extended dta snep server.
-     *  enableclient :- this will create a snep client with service name “urn:nfc:sn:snep” or “urn:nfc:sn:sneptest” based on the testcaseid.
+     *  enableclient :- this will create a snep client with service name "urn:nfc:sn:snep" or "urn:nfc:sn:sneptest" based on the testcaseid.
      *  disableclient :- this will destroy the client.
-     * @param serviceName this parameter is used by server as well client . Feasible values are “urn:nfc:sn:snep” and “urn:nfc:sn:sneptest”.
+     * @param serviceName this parameter is used by server as well client . Feasible values are "urn:nfc:sn:snep" and "urn:nfc:sn:sneptest".
      * @param serviceSap  this is used to specify the Service Access Point you wish to bind the service
      *   name of your server. Also it is used by client,  to connect to the remote server.
      *   miu :- this is used to specify the maximum information unit. For testing this value is 128 bytes. Used by server and client both.

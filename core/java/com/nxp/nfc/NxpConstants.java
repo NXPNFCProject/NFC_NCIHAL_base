@@ -169,6 +169,8 @@ public final class NxpConstants {
     public static final String ACTION_SWP_READER_TAG_REMOVE = "com.nxp.nfc_extras.ACTION_SWP_READER_TAG_REMOVE";
 
 
+    public static final String ACTION_ROUTING_TABLE_FULL = "nfc.intent.action.AID_ROUTING_TABLE_FULL";
+
     public static final String ACTION_MULTI_EVT_TRANSACTION = "com.gsma.services.nfc.action.TRANSACTION_EVENT";
     public static final String ACTION_CHECK_X509 = "org.simalliance.openmobileapi.service.ACTION_CHECK_X509";
     public static final String SET_PACKAGE_NAME = "org.simalliance.openmobileapi.service";
@@ -177,7 +179,7 @@ public final class NxpConstants {
     public static final String EXTRA_RESULT = "org.simalliance.openmobileapi.service.extra.EXTRA_RESULT";
 
     public static final String ACTION_CHECK_X509_RESULT = "org.simalliance.openmobileapi.service.ACTION_CHECK_X509_RESULT";
-    public static final String PERMISSIONS_TRANSACTION_EVENT = "com.gsma.service.nfc.permission.TRANSACTION_EVENT";
+    public static final String PERMISSIONS_TRANSACTION_EVENT = "com.gsma.services.nfc.permission.TRANSACTION_EVENT";
     public static final String EXTRA_GSMA_AID = "com.gsma.services.nfc.extra.AID";
     public static final String EXTRA_GSMA_DATA = "com.gsma.services.nfc.extra.DATA";
     public static final String ACTION_GSMA_ENABLE_NFC = "com.gsma.services.nfc.action.ENABLE_NFC";

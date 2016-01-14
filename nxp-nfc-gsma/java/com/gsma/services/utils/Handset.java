@@ -20,7 +20,7 @@ package com.gsma.services.utils;
 import com.nxp.nfc.gsma.internal.NxpHandset;
 import android.content.Context;
 import android.util.Log;
-
+import java.util.List;
 /**
  * This class handles the handset configuration & properties
  * @since NFCHST6.0
@@ -49,10 +49,15 @@ public class Handset {
     /** Device property [Battery levels]*/
     public static final int BATTERY_POWER_OFF_MODE=0x91;
 
+    /**
+     * Device property [Battery levels]
+     * @since NFCHST8.0
+     */
+    public static final int BATTERY_OPERATIONAL_MODE=0x92;
     /** Device property [Remote Access]*/
-    public static final int BIP=0x92;
+    public static final int BIP=0x93;
     /** Device property [Remote Access]*/
-    public static final int CAT_TP=0x93;
+    public static final int CAT_TP=0x94;
 
     private NxpHandset mNxpHandset = null;
     private String TAG = "Handset";
@@ -90,6 +95,19 @@ public class Handset {
         return mNxpHandset.getNxpProperty(feature);
     }
 
+    /**
+     * Return the list of Secure Elements which can be used by the NFC Controller
+     * when handset is operating in a following battery level.<BR><UL>
+     * <LI>{@link Handset#BATTERY_LOW_MODE}</LI>
+     * <LI>{@link Handset#BATTERY_POWER_OFF_MODE}</LI>
+     * <LI>{@link Handset#BATTERY_OPERATIONAL_MODE}</LI></UL>
+     * @param batteryLevel Battery level the handset is operating
+     * @return The list of secure Element names , or Collections.emptyList () if none of them are supported.
+     * @since TNFCHST8.0 <I>(REQ_059/REQ_060)</I>
+     * */
+     public List<String> getAvailableSecureElements(int batteryLevel) {
+         return mNxpHandset.getAvailableSecureElements(batteryLevel);
+     }
     /**
      * Asks the system to inform "transaction events" to any authorized/registered components via <code>BroadcastReceiver</code>.<BR>
      * Change SHALL not imply a power cycle and SHALL be valid until next handset reboot.<BR><BR>
