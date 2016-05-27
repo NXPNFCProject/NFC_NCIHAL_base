@@ -588,4 +588,35 @@ public final class NxpNfcAdapter {
             return null;
         }
     }
+    /**
+     * This api is called by applications to get the maximum routing table for AID registration
+     * The returned value doesn't provide the current remaining size available for AID.
+     * This value depends on the size available in NFCC and is constant.
+     * <p>Requires {@link android.Manifest.permission#NFC} permission.
+     * @return maximum routing table size for AID registration.
+     * @throws  IOException if any exception occurs while retrieving the size.
+     */
+    public int getMaxAidRoutingTableSize() throws IOException{
+        try{
+            return sNxpService.getMaxAidRoutingTableSize();
+        }catch(RemoteException e){
+            e.printStackTrace();
+            return 0x00;
+        }
+    }
+    /**
+     * This api is called by applications to get the size of AID data which is already committed
+     * to routing table in NFCC.
+     * <p>Requires {@link android.Manifest.permission#NFC} permission.
+     * @return  occupied size of routing table for AID registrations.
+     * @throws  IOException if any exception occurs while retrieving the size.
+     */
+    public int getCommittedAidRoutingTableSize() throws IOException{
+        try{
+            return sNxpService.getCommittedAidRoutingTableSize();
+        }catch(RemoteException e){
+            e.printStackTrace();
+            return 0x00;
+        }
+    }
 }

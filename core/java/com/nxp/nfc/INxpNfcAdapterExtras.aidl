@@ -33,4 +33,7 @@ interface INxpNfcAdapterExtras {
     byte[] doGetRouting();
     void notifyCheckCertResult(in String pkg, in boolean success);
     void deliverSeIntent(String pkg, in Intent seIntent);
+    int selectUicc(int uiccSlot);
+    int getSelectedUicc();
+
 }

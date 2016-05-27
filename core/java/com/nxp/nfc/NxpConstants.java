@@ -185,5 +185,14 @@ public final class NxpConstants {
     public static final String ACTION_GSMA_ENABLE_NFC = "com.gsma.services.nfc.action.ENABLE_NFC";
     public static final String ACTION_GSMA_ENABLE_SET_FLAG = "com.gsma.services.nfc.action.ENABLE_NFC_SET_FALG";
 
+    /**
+     * Indicates the states of an APDU service.
+     * Service is enabled only when the commit to routing table is successful
+     */
+    public static final int SERVICE_STATE_DISABLED  = 0;
+    public static final int SERVICE_STATE_ENABLED   = 1;
+    public static final int SERVICE_STATE_ENABLING  = 2;
+    public static final int SERVICE_STATE_DISABLING = 3;
+
 
 }

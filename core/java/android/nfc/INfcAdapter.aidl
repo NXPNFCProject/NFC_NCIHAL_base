@@ -46,6 +46,7 @@ import android.nfc.IAppCallback;
 import android.nfc.INfcAdapterExtras;
 import android.nfc.INfcTag;
 import android.nfc.INfcCardEmulation;
+import android.nfc.INfcFCardEmulation;
 import android.nfc.INfcUnlockHandler;
 import android.os.Bundle;
 import com.nxp.nfc.INxpNfcAdapter;
@@ -57,6 +58,7 @@ interface INfcAdapter
 {
     INfcTag getNfcTagInterface();
     INfcCardEmulation getNfcCardEmulationInterface();
+    INfcFCardEmulation getNfcFCardEmulationInterface();
     INfcAdapterExtras getNfcAdapterExtrasInterface(in String pkg);
     INxpNfcAdapter getNxpNfcAdapterInterface();
 

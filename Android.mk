@@ -206,6 +206,7 @@ LOCAL_SRC_FILES += \
         core/java/com/nxp/intf/IJcopService.aidl \
         core/java/com/nxp/intf/INxpExtrasService.aidl \
 	core/java/com/nxp/intf/IeSEClientServicesAdapter.aidl \
+	core/java/android/nfc/INfcFCardEmulation.aidl \
 	core/java/com/nxp/nfc/INfcDta.aidl \
 	core/java/com/nxp/nfc/INxpNfcAccessExtras.aidl \
 	core/java/android/nfc/INfcUnlockHandler.aidl \
