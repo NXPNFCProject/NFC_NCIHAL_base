@@ -80,10 +80,11 @@ public final class ApduServiceInfo implements Parcelable {
     //name of secure element
     static final String SECURE_ELEMENT_ESE = "eSE";
     static final String SECURE_ELEMENT_UICC = "UICC";
-
+    static final String SECURE_ELEMENT_UICC2 = "UICC2";
     //index of secure element
     public static final int SECURE_ELEMENT_ROUTE_ESE = 1;
     public static final int SECURE_ELEMENT_ROUTE_UICC = 2;
+    public static final int SECURE_ELEMENT_ROUTE_UICC2 = 0x4;
 
     //power state value
     static final int POWER_STATE_SWITCH_ON = 1;
@@ -457,7 +458,8 @@ public final class ApduServiceInfo implements Parcelable {
                     if (eventType == XmlPullParser.START_TAG && "se-id".equals(tagName) ) {
                         // Get name of eSE
                         seName = extParser.getAttributeValue(null, "name");
-                        if (seName == null  || (!seName.equalsIgnoreCase(SECURE_ELEMENT_ESE) && !seName.equalsIgnoreCase(SECURE_ELEMENT_UICC)) ) {
+                        if (seName == null  || (!seName.equalsIgnoreCase(SECURE_ELEMENT_ESE) && !seName.equalsIgnoreCase(SECURE_ELEMENT_UICC)
+                            && !seName.equalsIgnoreCase(SECURE_ELEMENT_UICC2)) ) {
                             throw new XmlPullParserException("Unsupported se name: " + seName);
                         }
                     } else if (eventType == XmlPullParser.START_TAG && "se-power-state".equals(tagName) ) {
@@ -485,10 +487,11 @@ public final class ApduServiceInfo implements Parcelable {
                     }
                 }
                 if(seName != null) {
-                    mSeExtension = new ESeInfo(seName.equals(SECURE_ELEMENT_ESE) ? SECURE_ELEMENT_ROUTE_ESE : SECURE_ELEMENT_ROUTE_UICC, powerState);
+                    mSeExtension = new ESeInfo(seName.equals(SECURE_ELEMENT_ESE)?SECURE_ELEMENT_ROUTE_ESE:(seName.equals(SECURE_ELEMENT_UICC)?SECURE_ELEMENT_ROUTE_UICC:SECURE_ELEMENT_ROUTE_UICC2),powerState);
                     Log.d(TAG, mSeExtension.toString());
                 } else {
                     mSeExtension = new ESeInfo(-1, 0);
+                    Log.d(TAG, mSeExtension.toString());
                 }
 
                 if(felicaId != null) {

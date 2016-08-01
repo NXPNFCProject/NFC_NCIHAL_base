@@ -39,6 +39,16 @@ public final class NxpConstants {
     public static final int UICC_ID_TYPE = 2;
 
     /**
+     * UICC2 ID to be able to select it as the default Secure Element
+     */
+    public static final String UICC2_ID = "com.nxp.uicc2.ID";
+
+    /**
+     *@hide
+     */
+    public static final int UICC2_ID_TYPE = 4;
+
+    /**
      * eSE ID to be able to select it as the default Secure Element
      */
     public static final String SMART_MX_ID = "com.nxp.smart_mx.ID";
@@ -60,7 +70,7 @@ public final class NxpConstants {
     /**
      *@hide
      */
-    public static final int ALL_SE_ID_TYPE = 3;
+    public static final int ALL_SE_ID_TYPE = 7;
 
     public static final String HOST_ID = "com.nxp.host.ID";
 

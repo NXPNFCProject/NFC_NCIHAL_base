@@ -124,9 +124,8 @@ public final class NfcFServiceInfo implements Parcelable {
             TypedArray sa = res.obtainAttributes(attrs,
                     com.android.internal.R.styleable.HostNfcFService);
             mService = info;
-         /*   mDescription = sa.getString(
-                    com.android.internal.R.styleable.HostNfcFService_description);*/
-            mDescription = "Fixme: NXP:<Activity Name>";
+            mDescription = sa.getString(
+                    com.android.internal.R.styleable.HostNfcFService_description);
             mDynamicSystemCode = null;
             mDynamicNfcid2 = null;
             sa.recycle();
@@ -142,11 +141,8 @@ public final class NfcFServiceInfo implements Parcelable {
                         "system-code-filter".equals(tagName) && systemCode == null) {
                     final TypedArray a = res.obtainAttributes(attrs,
                             com.android.internal.R.styleable.SystemCodeFilter);
-                    /*FIX ME: systemCode is not retrieving from R.styleable Syste,CodeFilter_name*/
-                    //systemCode = a.getString(
-                      //      com.android.internal.R.styleable.SystemCodeFilter_name).toUpperCase();
-                    Log.e(TAG, "systemCode: " + systemCode);
-                    systemCode=parser.getAttributeValue(null, "syscode").toUpperCase();
+                    systemCode = a.getString(
+                            com.android.internal.R.styleable.SystemCodeFilter_name).toUpperCase();
                     Log.e(TAG, "systemCode: " + systemCode);
                     if (!NfcFCardEmulation.isValidSystemCode(systemCode) &&
                             !systemCode.equalsIgnoreCase("NULL")) {
@@ -158,10 +154,8 @@ public final class NfcFServiceInfo implements Parcelable {
                         "nfcid2-filter".equals(tagName) && nfcid2 == null) {
                     final TypedArray a = res.obtainAttributes(attrs,
                             com.android.internal.R.styleable.Nfcid2Filter);
-                    /*FIX ME: nfcid2 is not retrieving*/
-                    //nfcid2 = a.getString(
-                      //      com.android.internal.R.styleable.Nfcid2Filter_name).toUpperCase();
-                    nfcid2=parser.getAttributeValue(null, "name").toUpperCase();
+                    nfcid2 = a.getString(
+                            com.android.internal.R.styleable.Nfcid2Filter_name).toUpperCase();
                     if (!nfcid2.equalsIgnoreCase("RANDOM") &&
                             !nfcid2.equalsIgnoreCase("NULL") &&
                             !NfcFCardEmulation.isValidNfcid2(nfcid2)) {

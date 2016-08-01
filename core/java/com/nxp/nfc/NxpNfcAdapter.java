@@ -245,7 +245,7 @@ public final class NxpNfcAdapter {
      * Select the default Secure Element to be used in Card Emulation mode
      * <p>Requires {@link android.Manifest.permission#NFC} permission.
      *
-     * @param seId Secure Element ID to be used : {@link NxpConstants#SMART_MX_ID} or {@link NxpConstants#UICC_ID}
+     * @param seId Secure Element ID to be used : {@link NxpConstants#SMART_MX_ID} or {@link NxpConstants#UICC_ID} or {@link NxpConstants#UICC2_ID}
      * @throws IOException If a failure occurred during the Secure Element selection
      */
     public void selectDefaultSecureElement(String pkg, String seId) throws IOException {
@@ -255,6 +255,8 @@ public final class NxpNfcAdapter {
 
         if (seId.equals(NxpConstants.UICC_ID)) {
             seID = NxpConstants.UICC_ID_TYPE;
+        } else if (seId.equals(NxpConstants.UICC2_ID)) {
+            seID= NxpConstants.UICC2_ID_TYPE;
         } else if (seId.equals(NxpConstants.SMART_MX_ID)) {
             seID= NxpConstants.SMART_MX_ID_TYPE;
         } else if (seId.equals(NxpConstants.ALL_SE_ID)) {
@@ -301,7 +303,10 @@ public final class NxpNfcAdapter {
             if (!seSelected) {
                 if (seId.equals(NxpConstants.UICC_ID)) {
                     sNxpService.storeSePreference(seID);
-                    throw new IOException("UICC not detected");
+                    throw new IOException("UICC not detected");}
+                else if (seId.equals(NxpConstants.UICC2_ID)) {
+                        sNxpService.storeSePreference(seID);
+                        throw new IOException("UICC2 not detected");
                 } else if (seId.equals(NxpConstants.SMART_MX_ID)) {
                     sNxpService.storeSePreference(seID);
                     throw new IOException("SMART_MX not detected");
@@ -470,6 +475,8 @@ public final class NxpNfcAdapter {
             seID = sNxpService.getSelectedSecureElement(pkg);
             if (seID == NxpConstants.UICC_ID_TYPE/*0xABCDF0*/) {
                 return NxpConstants.UICC_ID;
+            } else if (seID == NxpConstants.UICC2_ID_TYPE/*0xABCDF0*/) {
+                    return NxpConstants.UICC2_ID;
             } else if (seID == NxpConstants.SMART_MX_ID_TYPE/*0xABCDEF*/) {
                 return NxpConstants.SMART_MX_ID;
             } else if (seID == NxpConstants.ALL_SE_ID_TYPE/*0xABCDFE*/) {
