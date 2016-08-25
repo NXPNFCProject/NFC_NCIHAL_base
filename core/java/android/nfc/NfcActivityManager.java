@@ -254,11 +254,10 @@ public final class NfcActivityManager extends IAppCallback.Stub
         if (isResumed) {
             // requestNfcServiceCallback() verifies permission also
             requestNfcServiceCallback();
-        }
-        else {
+        } else {
             // Crash API calls early in case NFC permission is missing
             verifyNfcPermission();
-         }
+        }
     }
 
 
@@ -273,11 +272,10 @@ public final class NfcActivityManager extends IAppCallback.Stub
         if (isResumed) {
             // requestNfcServiceCallback() verifies permission also
             requestNfcServiceCallback();
-        }
-        else {
+        } else {
             // Crash API calls early in case NFC permission is missing
             verifyNfcPermission();
-         }
+        }
     }
 
     public void setNdefPushMessage(Activity activity, NdefMessage message, int flags) {
@@ -291,11 +289,10 @@ public final class NfcActivityManager extends IAppCallback.Stub
         if (isResumed) {
             // requestNfcServiceCallback() verifies permission also
             requestNfcServiceCallback();
-        }
-        else {
+        } else {
             // Crash API calls early in case NFC permission is missing
             verifyNfcPermission();
-         }
+        }
     }
 
     public void setNdefPushMessageCallback(Activity activity,
@@ -310,11 +307,10 @@ public final class NfcActivityManager extends IAppCallback.Stub
         if (isResumed) {
             // requestNfcServiceCallback() verifies permission also
             requestNfcServiceCallback();
-        }
-        else {
+        } else {
             // Crash API calls early in case NFC permission is missing
             verifyNfcPermission();
-         }
+        }
     }
 
     public void setOnNdefPushCompleteCallback(Activity activity,
@@ -328,11 +324,10 @@ public final class NfcActivityManager extends IAppCallback.Stub
         if (isResumed) {
             // requestNfcServiceCallback() verifies permission also
             requestNfcServiceCallback();
-        }
-        else {
+        } else {
             // Crash API calls early in case NFC permission is missing
             verifyNfcPermission();
-         }
+        }
     }
 
     /**
@@ -347,7 +342,7 @@ public final class NfcActivityManager extends IAppCallback.Stub
         }
     }
 
-        void verifyNfcPermission() {
+    void verifyNfcPermission() {
         try {
             NfcAdapter.sService.verifyNfcPermission();
         } catch (RemoteException e) {
@@ -376,39 +371,43 @@ public final class NfcActivityManager extends IAppCallback.Stub
             flags = state.flags;
             activity = state.activity;
         }
-
-        // Make callbacks without lock
-        if (ndefCallback != null) {
-            message  = ndefCallback.createNdefMessage(event);
-        }
-        if (urisCallback != null) {
-            uris = urisCallback.createBeamUris(event);
-            if (uris != null) {
-                ArrayList<Uri> validUris = new ArrayList<Uri>();
-                for (Uri uri : uris) {
-                    if (uri == null) {
-                        Log.e(TAG, "Uri not allowed to be null.");
-                        continue;
+        final long ident = Binder.clearCallingIdentity();
+        try {
+            // Make callbacks without lock
+            if (ndefCallback != null) {
+                message = ndefCallback.createNdefMessage(event);
+            }
+            if (urisCallback != null) {
+                uris = urisCallback.createBeamUris(event);
+                if (uris != null) {
+                    ArrayList<Uri> validUris = new ArrayList<Uri>();
+                    for (Uri uri : uris) {
+                        if (uri == null) {
+                            Log.e(TAG, "Uri not allowed to be null.");
+                            continue;
+                        }
+                        String scheme = uri.getScheme();
+                        if (scheme == null || (!scheme.equalsIgnoreCase("file") &&
+                                !scheme.equalsIgnoreCase("content"))) {
+                            Log.e(TAG, "Uri needs to have " +
+                                    "either scheme file or scheme content");
+                            continue;
+                        }
+                        uri = ContentProvider.maybeAddUserId(uri, UserHandle.myUserId());
+                        validUris.add(uri);
                     }
-                    String scheme = uri.getScheme();
-                    if (scheme == null || (!scheme.equalsIgnoreCase("file") &&
-                            !scheme.equalsIgnoreCase("content"))) {
-                        Log.e(TAG, "Uri needs to have " +
-                                "either scheme file or scheme content");
-                        continue;
-                    }
-                    uri = ContentProvider.maybeAddUserId(uri, UserHandle.myUserId());
-                    validUris.add(uri);
-                }
                     uris = validUris.toArray(new Uri[validUris.size()]);
+                }
             }
-        }
-        if (uris != null && uris.length > 0) {
-            for (Uri uri : uris) {
-                // Grant the NFC process permission to read these URIs
-                activity.grantUriPermission("com.android.nfc", uri,
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            if (uris != null && uris.length > 0) {
+                for (Uri uri : uris) {
+                    // Grant the NFC process permission to read these URIs
+                    activity.grantUriPermission("com.android.nfc", uri,
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                }
             }
+        } finally {
+            Binder.restoreCallingIdentity(ident);
         }
         return new BeamShareData(message, uris, new UserHandle(UserHandle.myUserId()), flags);
     }
