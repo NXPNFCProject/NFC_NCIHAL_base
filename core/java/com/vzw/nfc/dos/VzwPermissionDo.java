@@ -18,16 +18,16 @@ package com.vzw.nfc.dos;
 
 public class VzwPermissionDo extends VzwTlv {
 
-    public final static int _TAG = 0xE3;
+    public static final int TAG = 0xE3;
 
     private boolean mVzwAllowed = false;
 
     public VzwPermissionDo(byte[] rawData, int valueIndex, int valueLength) {
-        super(rawData, _TAG, valueIndex, valueLength);
+        super(rawData, TAG, valueIndex, valueLength);
     }
 
     public VzwPermissionDo(boolean allowed) {
-        super(null, _TAG, 0, 0);
+        super(null, TAG, 0, 0);
         mVzwAllowed = allowed;
     }
 

@@ -143,7 +143,7 @@ public final class NfcFServiceInfo implements Parcelable {
                             com.android.internal.R.styleable.SystemCodeFilter);
                     systemCode = a.getString(
                             com.android.internal.R.styleable.SystemCodeFilter_name).toUpperCase();
-                    Log.e(TAG, "systemCode: " + systemCode);
+                    Log.d(TAG, "systemCode: " + systemCode);
                     if (!NfcFCardEmulation.isValidSystemCode(systemCode) &&
                             !systemCode.equalsIgnoreCase("NULL")) {
                         Log.e(TAG, "Invalid System Code: " + systemCode);

@@ -101,6 +101,15 @@ public class VzwTlv {
     }
 
     @Override
+    public int hashCode() {
+         Integer dataHash = Arrays.hashCode(mRawData);
+         return Arrays.hashCode(new Object[] {new Integer (dataHash),
+                                              new Integer (mTag),
+                                              new Integer (mValueIndex),
+                                              new Integer (mValueLength)});
+    }
+
+    @Override
     public boolean equals(Object obj) {
         boolean equals = false;
 

@@ -19,17 +19,12 @@
 */
 package com.nxp.nfc;
 
-import android.app.Activity;
-import android.app.ActivityThread;
-import android.content.pm.IPackageManager;
-import android.content.pm.PackageManager;
 import java.util.HashMap;
 import java.util.Arrays;
 import java.util.Map;
 import android.nfc.INfcAdapter;
 import android.nfc.NfcAdapter;
 import android.nfc.INfcAdapterExtras;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ServiceManager;
 
@@ -576,6 +571,30 @@ public final class NxpNfcAdapter {
             return sNxpService.updateServiceState(UserHandle.myUserId() , serviceState);
         }catch(RemoteException e)
         {
+            e.printStackTrace();
+            return 0xFF;
+        }
+    }
+
+    /**
+     * This api is called by applications to update the NFC configurations which are
+     * already part of libnfc-nxp.conf and libnfc-brcm.conf
+     * <p>Requires {@link android.Manifest.permission#NFC} permission.<ul>
+     * <li>This api shall be called only Nfcservice is enabled.
+     * <li>This api shall be called only when there are no NFC transactions ongoing
+     * </ul>
+     * @param  configs NFC Configuration to be updated.
+     * @param  pkg package name of the caller
+     * @return whether  the update of configuration is
+     *          success or not.
+     *          0xFF - failure
+     *          0x00 - success
+     * @throws  IOException if any exception occurs during setting the NFC configuration.
+     */
+    public int setConfig(String configs , String pkg) throws IOException {
+        try {
+            return sNxpService.setConfig(configs , pkg);
+        } catch(RemoteException e) {
             e.printStackTrace();
             return 0xFF;
         }

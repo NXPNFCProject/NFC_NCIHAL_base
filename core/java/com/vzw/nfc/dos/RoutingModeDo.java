@@ -18,7 +18,7 @@ package com.vzw.nfc.dos;
 
 public class RoutingModeDo extends VzwTlv {
 
-    public final static int _TAG = 0xB2;
+    public static final int TAG = 0xB2;
 
     private byte mRoutingInfo = 0x00;
 
@@ -27,18 +27,18 @@ public class RoutingModeDo extends VzwTlv {
     private boolean mNoPowerModeAllowed = false;
 
     public RoutingModeDo(byte[] rawData, int valueIndex, int valueLength) {
-        super(rawData, _TAG, valueIndex, valueLength);
+        super(rawData, TAG, valueIndex, valueLength);
     }
 
     public RoutingModeDo(boolean low_power, boolean full_power, boolean no_power) {
-        super(null, _TAG, 0, 0);
+        super(null, TAG, 0, 0);
         mLowPowerModeAllowed = low_power;
         mFullPowerModeAllowed = full_power;
         mNoPowerModeAllowed = no_power;
     }
 
     public RoutingModeDo(byte route_info) {
-        super(null, _TAG, 0, 0);
+        super(null, TAG, 0, 0);
         mRoutingInfo = route_info;
     }
 

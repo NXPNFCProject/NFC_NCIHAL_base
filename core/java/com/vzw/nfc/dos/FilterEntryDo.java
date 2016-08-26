@@ -18,7 +18,7 @@ package com.vzw.nfc.dos;
 
 public class FilterEntryDo extends VzwTlv {
 
-    public final static int _TAG = 0xA1;
+    public static final int TAG = 0xA1;
 
     private AidRangeDo mAidRangeDo = null;
     private AidMaskDo mAidMaskDo = null;
@@ -27,13 +27,13 @@ public class FilterEntryDo extends VzwTlv {
     private VzwPermissionDo mVzwArDo = null;
 
     public FilterEntryDo(byte[] rawData, int valueIndex, int valueLength) {
-        super(rawData, _TAG, valueIndex, valueLength);
+        super(rawData, TAG, valueIndex, valueLength);
     }
 
     public FilterEntryDo(AidRangeDo aid_range, AidMaskDo aid_mask,
             RoutingModeDo routing_mode,
             FilterConditionTagDo filter_condition_tag) {
-        super(null, _TAG, 0, 0);
+        super( null, TAG, 0, 0);
         mAidMaskDo = aid_mask;
         mAidRangeDo = aid_range;
         mFilterConditionTagDo = filter_condition_tag;
@@ -78,23 +78,23 @@ public class FilterEntryDo extends VzwTlv {
         do {
             VzwTlv temp = VzwTlv.parse(data, index);
 
-            if (temp.getTag() == AidMaskDo._TAG) { // AID_MASK_DO
+            if (temp.getTag() == AidMaskDo.TAG) { // AID_MASK_DO
                 mAidMaskDo = new AidMaskDo(data, temp.getValueIndex(),
                         temp.getValueLength());
                 mAidMaskDo.translate();
-            } else if (temp.getTag() == AidRangeDo._TAG) { // AID_RANGE_DO
+            } else if (temp.getTag() == AidRangeDo.TAG) { // AID_RANGE_DO
                 mAidRangeDo = new AidRangeDo(data, temp.getValueIndex(),
                         temp.getValueLength());
                 mAidRangeDo.translate();
-            } else if (temp.getTag() == RoutingModeDo._TAG) { // ROUTING_MODE_DO
+            } else if (temp.getTag() == RoutingModeDo.TAG) { // ROUTING_MODE_DO
                 mRoutingModeDo = new RoutingModeDo(data, temp.getValueIndex(),
                         temp.getValueLength());
                 mRoutingModeDo.translate();
-            } else if (temp.getTag() == FilterConditionTagDo._TAG) { // FILTER_CONDITION_TAG_DO
+            } else if (temp.getTag() == FilterConditionTagDo.TAG) { // FILTER_CONDITION_TAG_DO
                 mFilterConditionTagDo = new FilterConditionTagDo(data,
                         temp.getValueIndex(), temp.getValueLength());
                 mFilterConditionTagDo.translate();
-            } else if (temp.getTag() == VzwPermissionDo._TAG) { // VZW_AR_DO
+            } else if (temp.getTag() == VzwPermissionDo.TAG) { // VZW_AR_DO
                 mVzwArDo = new VzwPermissionDo(data, temp.getValueIndex(),
                         temp.getValueLength());
                 mVzwArDo.translate();

@@ -21,16 +21,16 @@ import java.io.IOException;
 
 public class AidRangeDo extends VzwTlv {
 
-    public final static int _TAG = 0xC2;
+    public static final int TAG = 0xC2;
 
     private byte[] mAidRange = null;
 
     public AidRangeDo(byte[] rawData, int valueIndex, int valueLength) {
-        super(rawData, _TAG, valueIndex, valueLength);
+        super(rawData, TAG, valueIndex, valueLength);
     }
 
-    public AidRangeDo(byte[] aid_range) {
-        super(null, _TAG, 0, 0);
+    public AidRangeDo( byte[] aid_range ){
+        super( null, TAG, 0, 0);
         mAidRange = aid_range;
     }
 

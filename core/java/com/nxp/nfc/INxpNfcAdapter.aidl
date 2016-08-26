@@ -51,4 +51,5 @@ interface INxpNfcAdapter
     int getCommittedAidRoutingTableSize();
     int[] getActiveSecureElementList(String pkg);
     int updateServiceState(int userId , in Map serviceState);
+    int setConfig(String configs , String pkg);
 }
