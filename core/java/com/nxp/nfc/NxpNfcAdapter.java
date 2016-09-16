@@ -178,6 +178,10 @@ public final class NxpNfcAdapter {
                 {
                     arr[i]= NxpConstants.UICC_ID;
                 }
+                else if(seList[i]==NxpConstants.UICC2_ID_TYPE)
+                {
+                    arr[i]= NxpConstants.UICC2_ID;
+                }
                 else if (seList[i] == NxpConstants.ALL_SE_ID_TYPE) {
                     arr[i]= NxpConstants.ALL_SE_ID;
                 }
