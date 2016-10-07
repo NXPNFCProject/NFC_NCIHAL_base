@@ -122,10 +122,11 @@ public class NxpHandset {
             case MIFARE_DESFIRE:
             case NFC_FORUM_TYPE3:
             case BATTERY_LOW_MODE:
-            case BATTERY_POWER_OFF_MODE:
-                 result = true;
+                result = true;
                 break;
-
+            case BATTERY_POWER_OFF_MODE:
+                result = false;
+                break;
             default:
                 result = false;
         }

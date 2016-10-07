@@ -56,7 +56,7 @@ public class ClfFilterDoList extends VzwTlv {
 
             ClfFilterDo tmpClfFilterDo;
 
-            if (temp.getTag() == ClfFilterDo._TAG) { // CLF_FILTER_DO tag
+            if( temp.getTag() == ClfFilterDo.TAG) { // CLF_FILTER_DO tag
                 tmpClfFilterDo = new ClfFilterDo(data, temp.getValueIndex(),
                         temp.getValueLength());
                 tmpClfFilterDo.translate();

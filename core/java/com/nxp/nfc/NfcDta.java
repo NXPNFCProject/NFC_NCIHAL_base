@@ -30,10 +30,10 @@ import java.io.IOException;
 */
 public final class NfcDta {
     private static final String TAG = "NfcDta";
-    private static INfcDta mService;
+    private static INfcDta sService;
     public NfcDta(INfcDta mDtaService)
     {
-        mService = mDtaService;
+        sService = mDtaService;
     }
 
     /**
@@ -57,7 +57,7 @@ public final class NfcDta {
     public boolean snepDtaCmd(String cmdType, String serviceName, int serviceSap, int miu, int rwSize, int testCaseId)
     {
         try {
-            return mService.snepDtaCmd(cmdType, serviceName, serviceSap, miu, rwSize, testCaseId);
+            return sService.snepDtaCmd(cmdType, serviceName, serviceSap, miu, rwSize, testCaseId);
         } catch (RemoteException e) {
             return false;
         }

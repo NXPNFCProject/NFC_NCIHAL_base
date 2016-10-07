@@ -70,7 +70,8 @@ public final class NxpConstants {
     /**
      *@hide
      */
-    public static final int ALL_SE_ID_TYPE = 7;
+    public static final int ALL_SE_ID_TYPE = 3;
+    /*Ignoring UICC2 for PN66T/PN67T, ALL_SE_ID set to 3*/
 
     public static final String HOST_ID = "com.nxp.host.ID";
 

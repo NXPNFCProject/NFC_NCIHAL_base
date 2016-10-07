@@ -18,16 +18,16 @@ package com.vzw.nfc.dos;
 
 public class AidMaskDo extends VzwTlv {
 
-    public final static int _TAG = 0xC3;
+    public static final int TAG = 0xC3;
 
     private byte[] mAidMask = null;
 
     public AidMaskDo(byte[] rawData, int valueIndex, int valueLength) {
-        super(rawData, _TAG, valueIndex, valueLength);
+        super(rawData, TAG, valueIndex, valueLength);
     }
 
-    public AidMaskDo(byte[] aid_mask) {
-        super(null, _TAG, 0, 0);
+    public AidMaskDo( byte[] aid_mask ){
+        super( null, TAG, 0, 0);
         mAidMask = aid_mask;
     }
 

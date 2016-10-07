@@ -1031,6 +1031,21 @@ public final class ApduServiceInfo implements Parcelable {
         }
     }
 
+    static String serviceStateToString(int state) {
+        switch (state) {
+            case NxpConstants.SERVICE_STATE_DISABLED:
+                return "DISABLED";
+            case NxpConstants.SERVICE_STATE_ENABLED:
+                return "ENABLED";
+            case NxpConstants.SERVICE_STATE_ENABLING:
+                return "ENABLING";
+            case NxpConstants.SERVICE_STATE_DISABLING:
+                return "DISABLING";
+            default:
+                return "UNKNOWN";
+        }
+    }
+
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("    " + getComponent() +
                 " (Description: " + getDescription() + ")");
@@ -1049,6 +1064,10 @@ public final class ApduServiceInfo implements Parcelable {
             }
         }
         pw.println("    Settings Activity: " + mSettingsActivityName);
+        pw.println("    Routing Destination: " + (mOnHost ? "host" : "secure element"));
+        if (hasCategory(CardEmulation.CATEGORY_OTHER)) {
+            pw.println("    Service State: " + serviceStateToString(mServiceState));
+        }
     }
 
     public static class Nfcid2Group implements Parcelable {

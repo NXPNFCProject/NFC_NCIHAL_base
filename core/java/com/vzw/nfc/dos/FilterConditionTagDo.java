@@ -18,17 +18,17 @@ package com.vzw.nfc.dos;
 
 public class FilterConditionTagDo extends VzwTlv {
 
-    public final static int _TAG = 0xD2;
-    public final static byte SCREEN_OFF_TAG = (byte) 0xF1;
+    public static final int TAG = 0xD2;
+    public static final byte SCREEN_OFF_TAG = (byte)0xF1;
 
     private byte mFilterConditionTag = 0x00;
 
     public FilterConditionTagDo(byte[] rawData, int valueIndex, int valueLength) {
-        super(rawData, _TAG, valueIndex, valueLength);
+        super(rawData, TAG, valueIndex, valueLength);
     }
 
-    public FilterConditionTagDo(byte filter_cond_tag) {
-        super(null, _TAG, 0, 0);
+    public FilterConditionTagDo( byte filter_cond_tag ){
+        super( null, TAG, 0, 0);
         mFilterConditionTag = filter_cond_tag;
     }
 

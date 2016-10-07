@@ -26,16 +26,16 @@ package com.vzw.nfc.dos;
  */
 public class ClfFilterDo extends VzwTlv {
 
-    public final static int _TAG = 0xFE;
+    public static final int TAG = 0xFE;
 
     private FilterEntryDo mFilterEntryAr = null;
 
     public ClfFilterDo(byte[] rawData, int valueIndex, int valueLength) {
-        super(rawData, _TAG, valueIndex, valueLength);
+        super(rawData, TAG, valueIndex, valueLength);
     }
 
-    public ClfFilterDo(FilterEntryDo filter_entry_do) {
-        super(null, _TAG, 0, 0);
+    public ClfFilterDo(FilterEntryDo filter_entry_do ){
+        super( null, TAG, 0, 0);
         mFilterEntryAr = filter_entry_do;
     }
 
@@ -58,7 +58,7 @@ public class ClfFilterDo extends VzwTlv {
         do {
             VzwTlv temp = VzwTlv.parse(data, index);
 
-            if (temp.getTag() == FilterEntryDo._TAG) { // NFC-AR-DO
+            if( temp.getTag() == FilterEntryDo.TAG ) { // NFC-AR-DO
                 mFilterEntryAr = new FilterEntryDo(data, temp.getValueIndex(),
                         temp.getValueLength());
                 mFilterEntryAr.translate();
