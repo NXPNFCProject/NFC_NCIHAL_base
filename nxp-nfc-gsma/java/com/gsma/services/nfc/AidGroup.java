@@ -63,7 +63,11 @@ public class AidGroup {
      * @since NFCHST6.0
      */
     public void addNewAid(String aid) {
-        mAidList.add(aid);
+        if((aid != null) && !(aid.isEmpty())){
+            mAidList.add(aid);
+        }else{
+            throw new IllegalArgumentException("Invalid AID");
+        }
     }
 
     /**
@@ -73,7 +77,11 @@ public class AidGroup {
      * @since NFCHST6.0
      */
     public void removeAid(String aid) {
-        mAidList.remove(aid);
+        if((aid != null) && !(aid.isEmpty())){
+            mAidList.remove(aid);
+        }else{
+            throw new IllegalArgumentException("Invalid AID");
+        }
     }
 
     public List<String> getAidList() {

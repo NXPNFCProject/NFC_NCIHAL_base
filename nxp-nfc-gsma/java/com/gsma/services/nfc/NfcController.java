@@ -267,6 +267,12 @@ public class NfcController {
      */
     public OffHostService defineOffHostService(String description, String SEName) {
         boolean modifiable = true;
+        if((description == null) || (description.isEmpty())){
+            throw new IllegalArgumentException("Invalid description provided");
+        }
+        if((SEName == null) || (SEName.isEmpty())){
+            throw new IllegalArgumentException("Invalid SEName provided");
+        }
         String packageName = mContext.getPackageName();
         String serviceName = getRandomString();
         NxpOffHostService offHostService = new NxpOffHostService(mUserId, description, SEName, packageName,serviceName, modifiable);

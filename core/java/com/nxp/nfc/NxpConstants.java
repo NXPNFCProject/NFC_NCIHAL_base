@@ -68,16 +68,24 @@ public final class NxpConstants {
     public static final String ALL_SE_ID = "com.nxp.all_se.ID";
 
     /**
-     *@hide
+     *
      */
-    public static final int ALL_SE_ID_TYPE = 7;
-
     public static final String HOST_ID = "com.nxp.host.ID";
 
     /**
      *@hide
      */
     public static final int HOST_ID_TYPE = 0;
+
+    /** fw version major number
+     * @hide
+     */
+    static final byte PN553_FW_MAJOR_NUM = 1;
+
+    /** fw ROM code version
+     * @hide
+     */
+    static final byte PN553_FW_ROM_VER = 0x11;
 
     /**
      * Broadcast Action: Multiple card presented to emvco reader.

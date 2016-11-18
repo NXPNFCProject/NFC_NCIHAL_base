@@ -38,4 +38,5 @@ interface INxpNfcAdapterExtras {
     Bundle openuicc(in String pkg, IBinder b);
     Bundle closeuicc(in String pkg, IBinder b);
     Bundle transceiveuicc(in String pkg, in byte[] data_in);
+    boolean eSEChipReset(in String pkg);
 }

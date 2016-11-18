@@ -24,6 +24,7 @@ interface INxpExtrasService{
     Bundle open(in String pkg, IBinder b);
     Bundle close(in String pkg, IBinder b);
     Bundle transceive(in String pkg, in byte[] data_in);
+    Bundle getCallingAppPkg(in String pkg, IBinder b);
     byte[] getSecureElementUid(String pkg);
     boolean isEnabled();
  }

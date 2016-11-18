@@ -882,6 +882,7 @@ public final class ApduServiceInfo implements Parcelable {
             dest.writeParcelable(null, flags);
         }
         dest.writeInt(mModifiable ? 1 : 0);
+        dest.writeInt(mServiceState);
     };
 
     public static final Parcelable.Creator<ApduServiceInfo> CREATOR =
@@ -921,9 +922,11 @@ public final class ApduServiceInfo implements Parcelable {
                 }
             }
             boolean modifiable = source.readInt() != 0;
-            return new ApduServiceInfo(info, onHost, description, staticAidGroups,
+            ApduServiceInfo service = new ApduServiceInfo(info, onHost, description, staticAidGroups,
                     dynamicAidGroups, requiresUnlock, bannerResource, uid,
                     settingsActivityName, seExtension, nfcid2Groups, drawable,modifiable);
+            service.setServiceState(CardEmulation.CATEGORY_OTHER, source.readInt());
+            return service;
         }
 
         @Override

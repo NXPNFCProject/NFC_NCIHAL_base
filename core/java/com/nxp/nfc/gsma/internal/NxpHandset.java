@@ -47,6 +47,8 @@ public class NxpHandset {
     /** Device property [NFC Technologies]*/
     private static final int NFC_FORUM_TYPE3=0x23;
 
+    /** Device property [Framework components]*/
+    public static final int OMAPI=0x50;
 
     /** Device property [Battery Levels]*/
     private static final int BATTERY_LOW_MODE=0x90;
@@ -63,7 +65,7 @@ public class NxpHandset {
 
 
 
-    private final int GSMA_NFCHST = 8000;
+    private final int GSMA_NFCHST = 9000;
 
     public NxpHandset() {
         mContext = getContext();
@@ -104,7 +106,7 @@ public class NxpHandset {
      * Return handset status for the following features
      * HCI_SWP, MULTIPLE_ACTIVE_CEE FELICA,
      * MIFARE_CLASSIC, MIFARE_DESFIRE,
-     * NFC_FORUM_TYPE3 OMAPI BATTERY_LOW_MODE,
+     * NFC_FORUM_TYPE3, OMAPI, BATTERY_LOW_MODE,
      * BATTERY_POWER_OFF_MODE
      */
     public boolean getNxpProperty(int feature) {
@@ -122,6 +124,7 @@ public class NxpHandset {
             case MIFARE_DESFIRE:
             case NFC_FORUM_TYPE3:
             case BATTERY_LOW_MODE:
+            case OMAPI:
                 result = true;
                 break;
             case BATTERY_POWER_OFF_MODE:
@@ -149,7 +152,7 @@ public class NxpHandset {
             }
             break;
         default:
-            break;
+            throw new IllegalArgumentException("Wrong value for batteryLevel");
         }
         if(secureElemArray != null && secureElemArray.length > 0x00) {
             Collections.addAll(secureElementList , secureElemArray);
