@@ -64,7 +64,7 @@ public class AidGroup {
      */
     public void addNewAid(String aid) {
         if((aid != null) && !(aid.isEmpty())){
-            mAidList.add(aid);
+            mAidList.add(aid.toUpperCase());
         }else{
             throw new IllegalArgumentException("Invalid AID");
         }

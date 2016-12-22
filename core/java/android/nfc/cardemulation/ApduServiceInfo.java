@@ -568,7 +568,7 @@ public final class ApduServiceInfo implements Parcelable {
         return aidSize;
     }
 
-    private int getAidCacheSizeForCategory(String category) {
+    public int getAidCacheSizeForCategory(String category) {
         ArrayList<AidGroup> aidGroups = new ArrayList<AidGroup>();
         List<String> aids;
         int aidCacheSize = 0x00;

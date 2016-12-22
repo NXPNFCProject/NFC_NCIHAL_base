@@ -4,6 +4,7 @@ import android.app.ActivityThread;
 import android.content.pm.PackageManager;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.nfc.cardemulation.CardEmulation;
 import android.util.Log;
 
 import com.gsma.services.utils.InsufficientResourcesException;
@@ -189,10 +190,12 @@ public class OffHostService {
      * @since NFCHST6.0
      */
     public AidGroup defineAidGroup(String description, String category) {
-        if((description == null) || (description.isEmpty())){
+        if(description == null){
             throw new IllegalArgumentException("Invalid description provided");
         }
-        if((category == null) || (category.isEmpty())){
+        if((category == null) || (category.isEmpty()) ||
+                ((category.compareTo(CardEmulation.CATEGORY_OTHER)!=0) &&
+                        (category.compareTo(CardEmulation.CATEGORY_PAYMENT)!=0))){
             throw new IllegalArgumentException("Invalid category provided");
         }
         AidGroup aidGroup = new AidGroup(description,category);
@@ -219,7 +222,7 @@ public class OffHostService {
             AidGroup aidGroup[] = new AidGroup[mAidGroupList.size()];
             return mAidGroupList.toArray(aidGroup);
         } else {
-            return new AidGroup[0];
+            return null;
         }
     }
 
@@ -235,7 +238,7 @@ public class OffHostService {
             }
             mApduAidGroupList.add(mCeAidGroup);
         }
-    return mApduAidGroupList;
+        return mApduAidGroupList;
     }
 
     private NxpOffHostService convertToNxpOffhostService(OffHostService service) {
@@ -271,8 +274,15 @@ public class OffHostService {
     private ArrayList<com.gsma.services.nfc.AidGroup> convertToOffHostAidGroupList(List<android.nfc.cardemulation.AidGroup> mAidGroups) {
         ArrayList<com.gsma.services.nfc.AidGroup> mOffHostAidGroups= new ArrayList<com.gsma.services.nfc.AidGroup>();
         com.gsma.services.nfc.AidGroup mAidGroup;
+        String aidGroupDescription = "";
         for(android.nfc.cardemulation.AidGroup mCeAidGroup: mAidGroups) {
-            mAidGroup = defineAidGroup(mCeAidGroup.getDescription(), mCeAidGroup.getCategory());
+            if(mCeAidGroup.getDescription() == null) {
+                aidGroupDescription = "";
+            }
+            else {
+                aidGroupDescription = mCeAidGroup.getDescription();
+            }
+            mAidGroup = defineAidGroup(aidGroupDescription, mCeAidGroup.getCategory());
             for(String aid : mCeAidGroup.getAids()) {
                 mAidGroup.addNewAid(aid);
             }

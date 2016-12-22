@@ -112,7 +112,7 @@ public class NxpHandset {
     public boolean getNxpProperty(int feature) {
         boolean result = false;
         if((feature != HCI_SWP) && (feature != MULTIPLE_ACTIVE_CEE) && (feature != FELICA) && (feature != MIFARE_CLASSIC)
-            && (feature != MIFARE_DESFIRE) && (feature != NFC_FORUM_TYPE3) && (feature != BATTERY_LOW_MODE)
+            && (feature != MIFARE_DESFIRE) && (feature != NFC_FORUM_TYPE3) && (feature != BATTERY_LOW_MODE) && (feature != OMAPI)
             && (feature != BATTERY_POWER_OFF_MODE))
             throw new IllegalArgumentException("Feature is inappropriate argument");
 
@@ -156,6 +156,20 @@ public class NxpHandset {
         }
         if(secureElemArray != null && secureElemArray.length > 0x00) {
             Collections.addAll(secureElementList , secureElemArray);
+            for(int i =0; i< secureElementList.size(); i++) {
+                if(secureElementList.get(i).equals(NxpConstants.UICC_ID))
+                {
+                    secureElementList.set(i,"SIM1");
+                }
+                else if(secureElementList.get(i).equals(NxpConstants.UICC2_ID))
+                {
+                    secureElementList.set(i,"SIM2");
+                }
+                else if(secureElementList.get(i).equals(NxpConstants.SMART_MX_ID))
+                {
+                    secureElementList.set(i,"eSE");
+                }
+            }
             return secureElementList;
         }
         return Collections.emptyList();
@@ -169,7 +183,12 @@ public class NxpHandset {
         boolean isEnabled = false;
         Log.d(TAG,"pkg " + pkg);
         try {
-            isEnabled = mNfcControllerService.enableMultiEvt_NxptransactionReception(pkg, NxpConstants.UICC_ID);
+            isEnabled = mNfcControllerService.enableMultiEvt_NxptransactionReception(pkg, "SIM");
+
+            if(!isEnabled) {
+                isEnabled = mNfcControllerService.enableMultiEvt_NxptransactionReception(pkg, "SIM1");
+            }
+
         } catch (RemoteException e) {
             Log.e(TAG, "Exception:commitOffHostService failed", e);
         }
