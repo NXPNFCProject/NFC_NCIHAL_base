@@ -504,7 +504,13 @@ public final class ApduServiceInfo implements Parcelable {
                 extParser.close();
             }
         }else {
-            mSeExtension = new ESeInfo(-1, 0);
+            if(!onHost) {
+                Log.e(TAG, "SE extension not present, Setting default offhost seID");
+                mSeExtension = new ESeInfo(SECURE_ELEMENT_ROUTE_UICC, 0);
+            }
+            else {
+                mSeExtension = new ESeInfo(-1, 0);
+            }
             mFelicaExtension = new FelicaInfo(null, null);
         }
     }
