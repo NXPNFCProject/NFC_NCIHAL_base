@@ -20,7 +20,6 @@
 package com.nxp.nfc;
 
 import java.util.HashMap;
-import java.util.Arrays;
 import java.util.Map;
 import android.nfc.INfcAdapter;
 import android.nfc.NfcAdapter;

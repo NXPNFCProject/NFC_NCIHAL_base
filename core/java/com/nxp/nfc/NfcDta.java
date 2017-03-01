@@ -21,9 +21,6 @@
 package com.nxp.nfc;
 
 import android.os.RemoteException;
-import android.util.Log;
-
-import java.io.IOException;
 
 /**
  * This class provides the primary API for DTA operations.

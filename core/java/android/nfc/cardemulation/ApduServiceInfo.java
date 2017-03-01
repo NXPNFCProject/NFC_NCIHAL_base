@@ -37,7 +37,6 @@
 package android.nfc.cardemulation;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
@@ -50,7 +49,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.ResultReceiver;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Xml;
@@ -68,8 +66,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.io.File;
-import java.io.FileOutputStream;
+
 
 /**
  * @hide
@@ -148,7 +145,7 @@ public final class ApduServiceInfo implements Parcelable {
     /**
      * The Drawable of the service banner specified by the Application Dynamically.
      */
-    final public Drawable mBanner;
+    public final Drawable mBanner;
 
     /**
      * This says whether the Application can modify the AIDs or not.
