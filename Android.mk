@@ -45,6 +45,7 @@ LOCAL_SRC_FILES += \
        core/java/android/app/admin/SecurityLogTags.logtags \
        core/java/android/content/EventLogTags.logtags \
        core/java/android/speech/tts/EventLogTags.logtags \
+       core/java/android/net/EventLogTags.logtags \
        core/java/android/webkit/EventLogTags.logtags \
        core/java/com/android/internal/logging/EventLogTags.logtags \
 
@@ -75,6 +76,7 @@ LOCAL_SRC_FILES += \
 	core/java/android/app/IAppTask.aidl \
 	core/java/android/app/ITaskStackListener.aidl \
 	core/java/android/app/IBackupAgent.aidl \
+	core/java/android/app/IEphemeralResolver.aidl \
 	core/java/android/app/IInstrumentationWatcher.aidl \
 	core/java/android/app/INotificationManager.aidl \
 	core/java/android/app/IProcessObserver.aidl \
@@ -116,15 +118,20 @@ LOCAL_SRC_FILES += \
 	core/java/android/bluetooth/IBluetoothPan.aidl \
 	core/java/android/bluetooth/IBluetoothManager.aidl \
 	core/java/android/bluetooth/IBluetoothManagerCallback.aidl \
+	core/java/android/bluetooth/IBluetoothMap.aidl \
+	core/java/android/bluetooth/IBluetoothMapClient.aidl \
 	core/java/android/bluetooth/IBluetoothPbap.aidl \
 	core/java/android/bluetooth/IBluetoothPbapClient.aidl \
-	core/java/android/bluetooth/IBluetoothMap.aidl \
 	core/java/android/bluetooth/IBluetoothSap.aidl \
 	core/java/android/bluetooth/IBluetoothStateChangeCallback.aidl \
 	core/java/android/bluetooth/IBluetoothHeadsetClient.aidl \
+	core/java/android/bluetooth/IBluetoothInputHost.aidl \
+	core/java/android/bluetooth/IBluetoothHidDeviceCallback.aidl \
 	core/java/android/bluetooth/IBluetoothGatt.aidl \
 	core/java/android/bluetooth/IBluetoothGattCallback.aidl \
 	core/java/android/bluetooth/IBluetoothGattServerCallback.aidl \
+	core/java/android/bluetooth/le/IAdvertiserCallback.aidl \
+	core/java/android/bluetooth/le/IScannerCallback.aidl \
 	core/java/android/content/IClipboard.aidl \
 	core/java/android/content/IContentService.aidl \
 	core/java/android/content/IIntentReceiver.aidl \
@@ -198,32 +205,24 @@ LOCAL_SRC_FILES += \
 	core/java/android/net/ICaptivePortal.aidl \
 	core/java/android/net/IConnectivityManager.aidl \
 	core/java/android/net/IConnectivityMetricsLogger.aidl \
+	core/java/android/net/IIpConnectivityMetrics.aidl \
 	core/java/android/net/IEthernetManager.aidl \
 	core/java/android/net/IEthernetServiceListener.aidl \
 	core/java/android/net/INetworkManagementEventObserver.aidl \
 	core/java/android/net/INetworkPolicyListener.aidl \
 	core/java/android/net/INetworkPolicyManager.aidl \
+	core/java/android/net/INetworkRecommendationProvider.aidl \
 	core/java/android/net/INetworkScoreCache.aidl \
 	core/java/android/net/INetworkScoreService.aidl \
 	core/java/android/net/INetworkStatsService.aidl \
 	core/java/android/net/INetworkStatsSession.aidl \
 	core/java/android/net/nsd/INsdManager.aidl \
 	core/java/android/nfc/IAppCallback.aidl \
-	core/java/com/nxp/nfc/gsma/internal/INxpNfcController.aidl \
-	core/java/com/nxp/nfc/INxpNfcAdapter.aidl \
-	core/java/com/nxp/nfc/INxpNfcAdapterExtras.aidl \
-	core/java/com/nxp/nfc/INfcVzw.aidl \
 	core/java/android/nfc/INfcAdapter.aidl \
 	core/java/android/nfc/INfcAdapterExtras.aidl \
 	core/java/android/nfc/INfcTag.aidl \
 	core/java/android/nfc/INfcCardEmulation.aidl \
-	core/java/com/nxp/intf/ILoaderService.aidl \
-        core/java/com/nxp/intf/IJcopService.aidl \
-        core/java/com/nxp/intf/INxpExtrasService.aidl \
-	core/java/com/nxp/intf/IeSEClientServicesAdapter.aidl \
 	core/java/android/nfc/INfcFCardEmulation.aidl \
-	core/java/com/nxp/nfc/INfcDta.aidl \
-	core/java/com/nxp/nfc/INxpNfcAccessExtras.aidl \
 	core/java/android/nfc/INfcUnlockHandler.aidl \
 	core/java/android/nfc/ITagRemovedCallback.aidl \
 	core/java/android/os/IBatteryPropertiesListener.aidl \
@@ -315,9 +314,9 @@ LOCAL_SRC_FILES += \
 	core/java/com/android/internal/app/IAppOpsService.aidl \
 	core/java/com/android/internal/app/IAssistScreenshotReceiver.aidl \
 	core/java/com/android/internal/app/IBatteryStats.aidl \
-	core/java/com/android/internal/app/IEphemeralResolver.aidl \
 	core/java/com/android/internal/app/ISoundTriggerService.aidl \
 	core/java/com/android/internal/app/IVoiceInteractionManagerService.aidl \
+	core/java/com/android/internal/app/IVoiceInteractionSessionListener.aidl \
 	core/java/com/android/internal/app/IVoiceInteractionSessionShowCallback.aidl \
 	core/java/com/android/internal/app/IVoiceInteractor.aidl \
 	core/java/com/android/internal/app/IVoiceInteractorCallback.aidl \
@@ -328,6 +327,7 @@ LOCAL_SRC_FILES += \
 	core/java/com/android/internal/appwidget/IAppWidgetHost.aidl \
 	core/java/com/android/internal/backup/IBackupTransport.aidl \
 	core/java/com/android/internal/backup/IObbBackupService.aidl \
+	core/java/com/android/internal/inputmethod/IInputContentUriToken.aidl \
 	core/java/com/android/internal/policy/IKeyguardDrawnCallback.aidl \
 	core/java/com/android/internal/policy/IKeyguardExitCallback.aidl \
 	core/java/com/android/internal/policy/IKeyguardService.aidl \
@@ -351,6 +351,7 @@ LOCAL_SRC_FILES += \
 	core/java/com/android/internal/view/IInputMethodManager.aidl \
 	core/java/com/android/internal/view/IInputMethodSession.aidl \
 	core/java/com/android/internal/view/IInputSessionCallback.aidl \
+	core/java/com/android/internal/widget/ICheckCredentialProgressCallback.aidl \
 	core/java/com/android/internal/widget/ILockSettings.aidl \
 	core/java/com/android/internal/widget/IRemoteViewsFactory.aidl \
 	core/java/com/android/internal/widget/IRemoteViewsAdapterConnection.aidl \
@@ -434,8 +435,11 @@ LOCAL_SRC_FILES += \
 	telephony/java/com/android/ims/internal/IImsEcbm.aidl \
 	telephony/java/com/android/ims/internal/IImsEcbmListener.aidl \
         telephony/java/com/android/ims/internal/IImsExternalCallStateListener.aidl \
+        telephony/java/com/android/ims/internal/IImsFeatureStatusCallback.aidl \
         telephony/java/com/android/ims/internal/IImsMultiEndpoint.aidl \
 	telephony/java/com/android/ims/internal/IImsService.aidl \
+	telephony/java/com/android/ims/internal/IImsServiceController.aidl \
+	telephony/java/com/android/ims/internal/IImsServiceFeatureListener.aidl \
 	telephony/java/com/android/ims/internal/IImsStreamMediaSession.aidl \
 	telephony/java/com/android/ims/internal/IImsUt.aidl \
 	telephony/java/com/android/ims/internal/IImsUtListener.aidl \
@@ -459,9 +463,9 @@ LOCAL_SRC_FILES += \
 	telephony/java/com/android/internal/telephony/ITelephonyRegistry.aidl \
 	telephony/java/com/android/internal/telephony/IWapPushManager.aidl \
 	wifi/java/android/net/wifi/IWifiManager.aidl \
-	wifi/java/android/net/wifi/nan/IWifiNanEventListener.aidl \
-	wifi/java/android/net/wifi/nan/IWifiNanManager.aidl \
-	wifi/java/android/net/wifi/nan/IWifiNanSessionListener.aidl \
+	wifi/java/android/net/wifi/aware/IWifiAwareEventCallback.aidl \
+	wifi/java/android/net/wifi/aware/IWifiAwareManager.aidl \
+	wifi/java/android/net/wifi/aware/IWifiAwareDiscoverySessionCallback.aidl \
 	wifi/java/android/net/wifi/p2p/IWifiP2pManager.aidl \
 	wifi/java/android/net/wifi/IWifiScanner.aidl \
 	wifi/java/android/net/wifi/IRttManager.aidl \
@@ -476,6 +480,10 @@ LOCAL_SRC_FILES += \
 LOCAL_SRC_FILES += \
 	../../system/update_engine/binder_bindings/android/os/IUpdateEngine.aidl \
 	../../system/update_engine/binder_bindings/android/os/IUpdateEngineCallback.aidl \
+
+LOCAL_SRC_FILES +=  \
+	../../system/netd/server/binder/android/net/INetd.aidl \
+	../native/cmds/installd/binder/android/os/IInstalld.aidl \
 
 LOCAL_AIDL_INCLUDES += system/update_engine/binder_bindings
 
@@ -494,8 +502,14 @@ LOCAL_INTERMEDIATE_SOURCES := \
 			$(framework_res_source_path)/android/Manifest.java \
 			$(framework_res_source_path)/com/android/internal/R.java
 
+# Make sure that R.java and Manifest.java are built before we build
+# the source for this library.
+framework_res_R_stamp := \
+	$(call intermediates-dir-for,APPS,framework-res,,COMMON)/src/R.stamp
+LOCAL_ADDITIONAL_DEPENDENCIES := $(framework_res_R_stamp)
+
 LOCAL_NO_STANDARD_LIBRARIES := true
-LOCAL_JAVA_LIBRARIES := core-oj core-libart core-lambda-stubs conscrypt okhttp core-junit bouncycastle ext
+LOCAL_JAVA_LIBRARIES := core-oj core-libart conscrypt okhttp bouncycastle ext
 LOCAL_STATIC_JAVA_LIBRARIES := framework-protos
 
 LOCAL_MODULE := framework
@@ -510,15 +524,8 @@ LOCAL_EMMA_INSTRUMENT := true
 endif
 
 include $(BUILD_JAVA_LIBRARY)
+
 framework_module := $(LOCAL_INSTALLED_MODULE)
-
-# Make sure that R.java and Manifest.java are built before we build
-# the source for this library.
-framework_res_R_stamp := \
-	$(call intermediates-dir-for,APPS,framework-res,,COMMON)/src/R.stamp
-$(full_classes_compiled_jar): $(framework_res_R_stamp)
-$(built_dex_intermediate): $(framework_res_R_stamp)
-
 $(framework_module): | $(dir $(framework_module))framework-res.apk
 
 framework_built := $(call java-lib-deps,framework)
@@ -550,11 +557,9 @@ aidl_files := \
 	frameworks/base/media/java/android/media/tv/TvTrackInfo.aidl \
 	frameworks/base/media/java/android/media/browse/MediaBrowser.aidl \
 	frameworks/base/wifi/java/android/net/wifi/ScanSettings.aidl \
-	frameworks/base/wifi/java/android/net/wifi/nan/ConfigRequest.aidl \
-	frameworks/base/wifi/java/android/net/wifi/nan/PublishData.aidl \
-	frameworks/base/wifi/java/android/net/wifi/nan/SubscribeData.aidl \
-	frameworks/base/wifi/java/android/net/wifi/nan/PublishSettings.aidl \
-	frameworks/base/wifi/java/android/net/wifi/nan/SubscribeSettings.aidl \
+	frameworks/base/wifi/java/android/net/wifi/aware/ConfigRequest.aidl \
+	frameworks/base/wifi/java/android/net/wifi/aware/PublishConfig.aidl \
+	frameworks/base/wifi/java/android/net/wifi/aware/SubscribeConfig.aidl \
 	frameworks/base/wifi/java/android/net/wifi/p2p/WifiP2pInfo.aidl \
 	frameworks/base/wifi/java/android/net/wifi/p2p/WifiP2pDeviceList.aidl \
 	frameworks/base/wifi/java/android/net/wifi/p2p/WifiP2pConfig.aidl \
@@ -709,6 +714,7 @@ aidl_files := \
 	frameworks/base/core/java/android/service/quicksettings/Tile.aidl \
 	frameworks/native/aidl/binder/android/os/PersistableBundle.aidl \
 	system/netd/server/binder/android/net/UidRange.aidl \
+	frameworks/base/telephony/java/android/telephony/PcoData.aidl \
 
 gen := $(TARGET_OUT_COMMON_INTERMEDIATES)/framework.aidl
 $(gen): PRIVATE_SRC_FILES := $(aidl_files)
@@ -723,9 +729,6 @@ $(gen): $(aidl_files) | $(AIDL)
 # TODO: deal with com/google/android/googleapps
 packages_to_document := \
 	android \
-	com/nxp/nfc \
-        com/nxp/intf \
-        com/nxp/nfc/gsma/internal \
 	javax/microedition/khronos \
 	org/apache/http/conn \
 	org/apache/http/params
@@ -734,6 +737,7 @@ packages_to_document := \
 # Search through the base framework dirs for these packages.
 # The result will be relative to frameworks/base.
 fwbase_dirs_to_document := \
+	legacy-test/src \
 	test-runner/src \
 	$(patsubst $(LOCAL_PATH)/%,%, \
 	  $(wildcard \
@@ -745,9 +749,6 @@ fwbase_dirs_to_document := \
 
 # include definition of libcore_to_document
 include libcore/Docs.mk
-
-# include definition of junit_to_document
-include external/junit/Common.mk
 
 non_base_dirs := \
 	../opt/telephony/src/java/android/provider \
@@ -789,8 +790,7 @@ html_dirs := \
 # Common sources for doc check and api check
 common_src_files := \
 	$(call find-other-html-files, $(html_dirs)) \
-	$(addprefix ../../, $(libcore_to_document)) \
-	$(addprefix ../../external/junit/, $(junit_to_document))
+	$(addprefix ../../, $(libcore_to_document))
 
 # These are relative to frameworks/base
 framework_docs_LOCAL_SRC_FILES := \
@@ -903,16 +903,16 @@ sample_groups := -samplegroup Admin \
 
 ## SDK version identifiers used in the published docs
   # major[.minor] version for current SDK. (full releases only)
-framework_docs_SDK_VERSION:=6.0
+framework_docs_SDK_VERSION:=7.0
   # release version (ie "Release x")  (full releases only)
 framework_docs_SDK_REL_ID:=1
 
 framework_docs_LOCAL_DROIDDOC_OPTIONS += \
 		-hdf sdk.codename N \
-		-hdf sdk.preview.version 2 \
+		-hdf sdk.preview.version 5 \
 		-hdf sdk.version $(framework_docs_SDK_VERSION) \
 		-hdf sdk.rel.id $(framework_docs_SDK_REL_ID) \
-		-hdf sdk.preview 1
+		-hdf sdk.preview 0
 
 # ====  the api stubs and current.xml ===========================
 include $(CLEAR_VARS)
@@ -932,6 +932,7 @@ LOCAL_DROIDDOC_STUB_OUT_DIR := $(TARGET_OUT_COMMON_INTERMEDIATES)/JAVA_LIBRARIES
 
 LOCAL_DROIDDOC_OPTIONS:=\
 		$(framework_docs_LOCAL_DROIDDOC_OPTIONS) \
+		-referenceonly \
 		-api $(INTERNAL_PLATFORM_API_FILE) \
 		-removedApi $(INTERNAL_PLATFORM_REMOVED_API_FILE) \
 		-nodocs
@@ -965,6 +966,7 @@ LOCAL_DROIDDOC_STUB_OUT_DIR := $(TARGET_OUT_COMMON_INTERMEDIATES)/JAVA_LIBRARIES
 
 LOCAL_DROIDDOC_OPTIONS:=\
 		$(framework_docs_LOCAL_DROIDDOC_OPTIONS) \
+		-referenceonly \
 		-showAnnotation android.annotation.SystemApi \
 		-api $(INTERNAL_PLATFORM_SYSTEM_API_FILE) \
 		-removedApi $(INTERNAL_PLATFORM_SYSTEM_REMOVED_API_FILE) \
@@ -999,6 +1001,7 @@ LOCAL_DROIDDOC_STUB_OUT_DIR := $(TARGET_OUT_COMMON_INTERMEDIATES)/JAVA_LIBRARIES
 
 LOCAL_DROIDDOC_OPTIONS:=\
                $(framework_docs_LOCAL_DROIDDOC_OPTIONS) \
+               -referenceonly \
                -stubs $(TARGET_OUT_COMMON_INTERMEDIATES)/JAVA_LIBRARIES/android_test_stubs_current_intermediates/src \
                -showAnnotation android.annotation.TestApi \
                -api $(INTERNAL_PLATFORM_TEST_API_FILE) \
@@ -1032,6 +1035,7 @@ LOCAL_MODULE := doc-comment-check
 
 LOCAL_DROIDDOC_OPTIONS:=\
 		$(framework_docs_LOCAL_DROIDDOC_OPTIONS) \
+		-referenceonly \
 		-parsecomments
 
 LOCAL_DROIDDOC_CUSTOM_TEMPLATE_DIR:=build/tools/droiddoc/templates-sdk
@@ -1068,8 +1072,7 @@ LOCAL_DROIDDOC_OPTIONS:=\
 		-title "Android SDK" \
 		-proofread $(OUT_DOCS)/$(LOCAL_MODULE)-proofread.txt \
 		-sdkvalues $(OUT_DOCS) \
-		-hdf android.whichdoc offline \
-		-referenceonly
+		-hdf android.whichdoc offline
 
 LOCAL_DROIDDOC_CUSTOM_TEMPLATE_DIR:=build/tools/droiddoc/templates-sdk
 
@@ -1082,6 +1085,48 @@ $(static_doc_index_redirect): \
 	$(hide) $(ACP) $< $@
 
 $(full_target): $(static_doc_index_redirect)
+$(full_target): $(framework_built)
+
+
+# ====  static html in the sdk ==================================
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES:=$(framework_docs_LOCAL_SRC_FILES)
+LOCAL_INTERMEDIATE_SOURCES:=$(framework_docs_LOCAL_INTERMEDIATE_SOURCES)
+LOCAL_JAVA_LIBRARIES:=$(framework_docs_LOCAL_JAVA_LIBRARIES)
+LOCAL_MODULE_CLASS:=$(framework_docs_LOCAL_MODULE_CLASS)
+LOCAL_DROIDDOC_SOURCE_PATH:=$(framework_docs_LOCAL_DROIDDOC_SOURCE_PATH)
+LOCAL_DROIDDOC_HTML_DIR:=$(framework_docs_LOCAL_DROIDDOC_HTML_DIR)
+LOCAL_ADDITIONAL_JAVA_DIR:=$(framework_docs_LOCAL_ADDITIONAL_JAVA_DIR)
+LOCAL_ADDITIONAL_DEPENDENCIES:=$(framework_docs_LOCAL_ADDITIONAL_DEPENDENCIES)
+
+LOCAL_MODULE := offline-sdk-referenceonly
+
+LOCAL_DROIDDOC_OPTIONS:=\
+		$(framework_docs_LOCAL_DROIDDOC_OPTIONS) \
+		-offlinemode \
+		-title "Android SDK" \
+		-proofread $(OUT_DOCS)/$(LOCAL_MODULE)-proofread.txt \
+		-sdkvalues $(OUT_DOCS) \
+		-hdf android.whichdoc offline \
+		-referenceonly
+
+LOCAL_DROIDDOC_CUSTOM_TEMPLATE_DIR:=build/tools/droiddoc/templates-sdk
+
+include $(BUILD_DROIDDOC)
+
+static_doc_index_redirect := $(out_dir)/index.html
+$(static_doc_index_redirect): $(LOCAL_PATH)/docs/docs-documentation-redirect.html
+	$(copy-file-to-target)
+
+static_doc_properties := $(out_dir)/source.properties
+$(static_doc_properties): \
+	$(LOCAL_PATH)/docs/source.properties | $(ACP)
+	$(hide) mkdir -p $(dir $@)
+	$(hide) $(ACP) $< $@
+
+$(full_target): $(static_doc_index_redirect)
+$(full_target): $(static_doc_properties)
 $(full_target): $(framework_built)
 
 
@@ -1133,6 +1178,7 @@ LOCAL_MODULE := online-system-api-sdk
 
 LOCAL_DROIDDOC_OPTIONS:= \
 		$(framework_docs_LOCAL_DROIDDOC_OPTIONS) \
+		-referenceonly \
 		-showAnnotation android.annotation.SystemApi \
 		-title "Android SDK - Including system APIs." \
 		-toroot / \
@@ -1169,17 +1215,67 @@ LOCAL_MODULE := ds
 
 LOCAL_DROIDDOC_OPTIONS:= \
 		$(framework_docs_LOCAL_DROIDDOC_OPTIONS) \
-		-devsite \
-		-hdf devsite true \
 		-toroot / \
 		-hdf android.whichdoc online \
+		-devsite \
 		$(sample_groups) \
-		-useUpdatedTemplates \
 		-hdf android.hasSamples true \
-		-yaml _book.yaml \
 		-samplesdir $(samples_dir)
 
-LOCAL_DROIDDOC_CUSTOM_TEMPLATE_DIR:=build/tools/droiddoc/templates-sdk-dev
+LOCAL_DROIDDOC_CUSTOM_TEMPLATE_DIR:=build/tools/droiddoc/templates-sdk
+
+include $(BUILD_DROIDDOC)
+
+# ==== docs for the web (on the devsite app engine server) =======================
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES:=$(framework_docs_LOCAL_SRC_FILES)
+LOCAL_INTERMEDIATE_SOURCES:=$(framework_docs_LOCAL_INTERMEDIATE_SOURCES)
+LOCAL_STATIC_JAVA_LIBRARIES:=$(framework_docs_LOCAL_STATIC_JAVA_LIBRARIES)
+LOCAL_JAVA_LIBRARIES:=$(framework_docs_LOCAL_JAVA_LIBRARIES)
+LOCAL_MODULE_CLASS:=$(framework_docs_LOCAL_MODULE_CLASS)
+LOCAL_DROIDDOC_SOURCE_PATH:=$(framework_docs_LOCAL_DROIDDOC_SOURCE_PATH)
+LOCAL_DROIDDOC_HTML_DIR:=$(framework_docs_LOCAL_DROIDDOC_HTML_DIR)
+LOCAL_ADDITIONAL_JAVA_DIR:=$(framework_docs_LOCAL_ADDITIONAL_JAVA_DIR)
+LOCAL_ADDITIONAL_DEPENDENCIES:=$(framework_docs_LOCAL_ADDITIONAL_DEPENDENCIES)
+# specify a second html input dir and an output path relative to OUT_DIR)
+LOCAL_ADDITIONAL_HTML_DIR:=docs/html-intl /
+
+LOCAL_MODULE := ds-static
+
+LOCAL_DROIDDOC_OPTIONS:= \
+		$(framework_docs_LOCAL_DROIDDOC_OPTIONS) \
+		-hdf android.whichdoc online \
+		-staticonly \
+		-toroot / \
+		-devsite \
+		-ignoreJdLinks
+
+LOCAL_DROIDDOC_CUSTOM_TEMPLATE_DIR:=build/tools/droiddoc/templates-sdk
+
+include $(BUILD_DROIDDOC)
+
+# ==== generates full navtree for resolving @links in ds postprocessing ====
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES:=$(framework_docs_LOCAL_SRC_FILES)
+LOCAL_INTERMEDIATE_SOURCES:=$(framework_docs_LOCAL_INTERMEDIATE_SOURCES)
+LOCAL_STATIC_JAVA_LIBRARIES:=$(framework_docs_LOCAL_STATIC_JAVA_LIBRARIES)
+LOCAL_JAVA_LIBRARIES:=$(framework_docs_LOCAL_JAVA_LIBRARIES)
+LOCAL_MODULE_CLASS:=$(framework_docs_LOCAL_MODULE_CLASS)
+LOCAL_DROIDDOC_SOURCE_PATH:=$(framework_docs_LOCAL_DROIDDOC_SOURCE_PATH)
+LOCAL_ADDITIONAL_JAVA_DIR:=$(framework_docs_LOCAL_ADDITIONAL_JAVA_DIR)
+LOCAL_ADDITIONAL_DEPENDENCIES:=$(framework_docs_LOCAL_ADDITIONAL_DEPENDENCIES)
+
+LOCAL_MODULE := ds-ref-navtree
+
+LOCAL_DROIDDOC_OPTIONS:= \
+		$(framework_docs_LOCAL_DROIDDOC_OPTIONS) \
+		-hdf android.whichdoc online \
+		-toroot / \
+		-atLinksNavtree \
+		-navtreeonly
+
+LOCAL_DROIDDOC_CUSTOM_TEMPLATE_DIR:=build/tools/droiddoc/templates-sdk
 
 include $(BUILD_DROIDDOC)
 
@@ -1204,11 +1300,10 @@ LOCAL_DROIDDOC_OPTIONS:= \
 		-toroot / \
 		-hdf android.whichdoc online \
 		$(sample_groups) \
-		-useUpdatedTemplates \
 		-hdf android.hasSamples true \
 		-samplesdir $(samples_dir)
 
-LOCAL_DROIDDOC_CUSTOM_TEMPLATE_DIR:=build/tools/droiddoc/templates-sdk-dev
+LOCAL_DROIDDOC_CUSTOM_TEMPLATE_DIR:=build/tools/droiddoc/templates-sdk
 
 include $(BUILD_DROIDDOC)
 
@@ -1227,6 +1322,7 @@ LOCAL_ADDITIONAL_DEPENDENCIES:=$(framework_docs_LOCAL_ADDITIONAL_DEPENDENCIES)
 LOCAL_MODULE := hidden
 LOCAL_DROIDDOC_OPTIONS:=\
 		$(framework_docs_LOCAL_DROIDDOC_OPTIONS) \
+		-referenceonly \
 		-title "Android SDK - Including hidden APIs."
 #		-hidden
 

@@ -38,8 +38,6 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-
-
 /**
  * @hide
  */
@@ -82,11 +80,16 @@ public final class NfcFServiceInfo implements Parcelable {
     final int mUid;
 
     /**
+     * LF_T3T_PMM of the service
+     */
+    final String mT3tPmm;
+
+    /**
      * @hide
      */
     public NfcFServiceInfo(ResolveInfo info, String description,
             String systemCode, String dynamicSystemCode, String nfcid2, String dynamicNfcid2,
-            int uid) {
+            int uid,String t3tPmm) {
         this.mService = info;
         this.mDescription = description;
         this.mSystemCode = systemCode;
@@ -94,6 +97,7 @@ public final class NfcFServiceInfo implements Parcelable {
         this.mNfcid2 = nfcid2;
         this.mDynamicNfcid2 = dynamicNfcid2;
         this.mUid = uid;
+        this.mT3tPmm = t3tPmm;
     }
 
     public NfcFServiceInfo(PackageManager pm, ResolveInfo info)
@@ -132,6 +136,7 @@ public final class NfcFServiceInfo implements Parcelable {
 
             String systemCode = null;
             String nfcid2 = null;
+            String t3tPmm = null;
             final int depth = parser.getDepth();
 
             while (((eventType = parser.next()) != XmlPullParser.END_TAG ||
@@ -164,9 +169,24 @@ public final class NfcFServiceInfo implements Parcelable {
                     }
                     a.recycle();
                 }
-            }
+                else if (eventType == XmlPullParser.START_TAG &&
+                        "t3tPmm-filter".equals(tagName) && t3tPmm == null) {
+                    final TypedArray a = res.obtainAttributes(attrs,
+                            com.android.internal.R.styleable.T3tPmmFilter);
+                    t3tPmm = a.getString(
+                            com.android.internal.R.styleable.T3tPmmFilter_name).toUpperCase();
+                    Log.e(TAG, " Value t3tPmm: " + t3tPmm);
+                    if(t3tPmm == null) {
+                        String defaultT3tPmm = "FFFFFFFFFFFFFFFF";
+                        t3tPmm = defaultT3tPmm;
+                                            }
+                    Log.e(TAG, "T3T PMM " + t3tPmm);
+                    a.recycle();
+                }
+             }
             mSystemCode = (systemCode == null ? "NULL" : systemCode);
             mNfcid2 = (nfcid2 == null ? "NULL" : nfcid2);
+            mT3tPmm = (t3tPmm == null ? "NULL" : t3tPmm);
         } catch (NameNotFoundException e) {
             throw new XmlPullParserException("Unable to create context for: " + si.packageName);
         } finally {
@@ -182,7 +202,7 @@ public final class NfcFServiceInfo implements Parcelable {
     }
 
     public String getSystemCode() {
-         return (mDynamicSystemCode == null ? mSystemCode : mDynamicSystemCode);
+        return (mDynamicSystemCode == null ? mSystemCode : mDynamicSystemCode);
     }
 
     public void setOrReplaceDynamicSystemCode(String systemCode) {
@@ -203,6 +223,10 @@ public final class NfcFServiceInfo implements Parcelable {
 
     public int getUid() {
         return mUid;
+    }
+
+    public String getT3tPmm() {
+        return mT3tPmm;
     }
 
     public CharSequence loadLabel(PackageManager pm) {
@@ -226,6 +250,7 @@ public final class NfcFServiceInfo implements Parcelable {
         if (mDynamicNfcid2 != null) {
             out.append(", dynamic NFCID2: " + mDynamicNfcid2);
         }
+        out.append(", T3T PMM:" + mT3tPmm);
         return out.toString();
     }
 
@@ -238,7 +263,7 @@ public final class NfcFServiceInfo implements Parcelable {
         if (!thatService.getComponent().equals(this.getComponent())) return false;
         if (!thatService.mSystemCode.equalsIgnoreCase(this.mSystemCode)) return false;
         if (!thatService.mNfcid2.equalsIgnoreCase(this.mNfcid2)) return false;
-
+        if (!thatService.mT3tPmm.equalsIgnoreCase(this.mT3tPmm)) return false;
         return true;
     }
 
@@ -267,6 +292,7 @@ public final class NfcFServiceInfo implements Parcelable {
             dest.writeString(mDynamicNfcid2);
         }
         dest.writeInt(mUid);
+        dest.writeString(mT3tPmm);
     };
 
     public static final Parcelable.Creator<NfcFServiceInfo> CREATOR =
@@ -286,8 +312,9 @@ public final class NfcFServiceInfo implements Parcelable {
                 dynamicNfcid2 = source.readString();
             }
             int uid = source.readInt();
+            String t3tPmm = source.readString();
             NfcFServiceInfo service = new NfcFServiceInfo(info, description,
-                    systemCode, dynamicSystemCode, nfcid2, dynamicNfcid2, uid);
+                    systemCode, dynamicSystemCode, nfcid2, dynamicNfcid2, uid, t3tPmm);
             return service;
         }
 
@@ -302,6 +329,7 @@ public final class NfcFServiceInfo implements Parcelable {
                 " (Description: " + getDescription() + ")");
         pw.println("    System Code: " + getSystemCode());
         pw.println("    NFCID2: " + getNfcid2());
+        pw.println("    T3tPmm: " + getT3tPmm());
     }
 }
 
