@@ -43,3 +43,4 @@
 | Android Version        | NXP Release          | NXP Tag  |
 | :-------------: |:-------------:| :-----:|
 | android-o-preview1                    |  8.0.9_O (PN553/PN557) |  NFC_NCIHALx_AR1800.8.0.9_O_OpnSrc |
+| android-o-preview1                    |  8.0.C_O (PN553/PN557) |  NFC_NCIHALx_AR1800.8.0.C_O_OpnSrc |
