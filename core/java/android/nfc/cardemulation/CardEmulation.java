@@ -637,6 +637,33 @@ public final class CardEmulation {
         return true;
     }
 
+    /**
+     * A valid APDU pattern according to ISO/IEC 7816-4:
+     * <ul>
+     * <li>Has >= 1 bytes and <=124 bytes (>=2 hex chars and <= 248 hex chars)
+     * <li>Consist of only hex characters
+     * </ul>
+     *
+     * @hide
+     */
+    public static boolean isValidApduString(String apdu) {
+        if (apdu == null)
+            return false;
+
+        if (apdu.length() < 2 || apdu.length() > 248 || ((apdu.length() % 2) != 0)) {
+            Log.e(TAG, "APDU " + apdu + " is not a valid apdu pattern.");
+            return false;
+        }
+
+        // Verify hex characters
+        if (!apdu.matches("[0-9A-Fa-f]{10,32}")) {
+            Log.e(TAG, "APDU " + apdu + " is not a valid apdu pattern.");
+            return false;
+        }
+
+        return true;
+    }
+
     void recoverService() {
         NfcAdapter adapter = NfcAdapter.getDefaultAdapter(mContext);
         sService = adapter.getCardEmulationService();
