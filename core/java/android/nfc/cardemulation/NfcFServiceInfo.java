@@ -44,6 +44,7 @@ import java.io.PrintWriter;
 public final class NfcFServiceInfo implements Parcelable {
     static final String TAG = "NfcFServiceInfo";
 
+    private static final String DEFAULT_T3T_PMM = "FFFFFFFFFFFFFFFF";
     /**
      * The service that implements this
      */
@@ -175,18 +176,13 @@ public final class NfcFServiceInfo implements Parcelable {
                             com.android.internal.R.styleable.T3tPmmFilter);
                     t3tPmm = a.getString(
                             com.android.internal.R.styleable.T3tPmmFilter_name).toUpperCase();
-                    Log.e(TAG, " Value t3tPmm: " + t3tPmm);
-                    if(t3tPmm == null) {
-                        String defaultT3tPmm = "FFFFFFFFFFFFFFFF";
-                        t3tPmm = defaultT3tPmm;
-                                            }
                     Log.e(TAG, "T3T PMM " + t3tPmm);
                     a.recycle();
                 }
              }
             mSystemCode = (systemCode == null ? "NULL" : systemCode);
             mNfcid2 = (nfcid2 == null ? "NULL" : nfcid2);
-            mT3tPmm = (t3tPmm == null ? "NULL" : t3tPmm);
+            mT3tPmm = (t3tPmm == null ? DEFAULT_T3T_PMM : t3tPmm);
         } catch (NameNotFoundException e) {
             throw new XmlPullParserException("Unable to create context for: " + si.packageName);
         } finally {
