@@ -37,7 +37,7 @@
 | android-7.0.0_r12                     |  7.3.0_N (PN553) |  NFC_NCIHALx_ARC0.7.3.0_N_OpnSrc |
 | android-7.1.1_r1                     |  7.4.0_N (PN548C2/PN551) |  NFC_NCIHALx_AR3C.7.4.0_N_OpnSrc |
 | android-7.1.1_r1                     |  7.5.0_N (PN553) |  NFC_NCIHALx_ARC0.7.5.0_N_OpnSrc |
-
+| android-8.0.0_r4               |  8.3.0_O (PN548C2/PN551/PN553) |  NFC_NCIHALx_AR0054.8.3.0_O_OpnSrc |
 ####Supported Versions on "br_android_ncihalx_o" Branch
 
 | Android Version        | NXP Release          | NXP Tag  |
