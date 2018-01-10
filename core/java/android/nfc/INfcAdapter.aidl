@@ -49,6 +49,7 @@ import android.nfc.INfcCardEmulation;
 import android.nfc.INfcFCardEmulation;
 import android.nfc.INfcUnlockHandler;
 import android.nfc.ITagRemovedCallback;
+import android.nfc.INfcDta;
 import android.os.Bundle;
 import android.os.IBinder;
 
@@ -61,6 +62,7 @@ interface INfcAdapter
     INfcCardEmulation getNfcCardEmulationInterface();
     INfcFCardEmulation getNfcFCardEmulationInterface();
     INfcAdapterExtras getNfcAdapterExtrasInterface(in String pkg);
+    INfcDta getNfcDtaInterface(in String pkg);
     IBinder getNfcAdapterVendorInterface(in String vendor);
 
     int getState();
