@@ -77,7 +77,7 @@ import android.util.Log;
  * <ul>
  * <li>Exactly one {@link android.R.styleable#SystemCodeFilter &lt;system-code-filter&gt;} tag.</li>
  * <li>Exactly one {@link android.R.styleable#Nfcid2Filter &lt;nfcid2-filter&gt;} tag.</li>
-  * <li>Exactly on or zero {@link android.R.styleable#T3tPmmFilter &lt;t3tPmm-filter&gt;} tag.</li>
+ * <li>Zero or one {@link android.R.styleable#T3tPmmFilter &lt;t3tPmm-filter&gt;} tag.</li>
  * </ul>
  * </p>
  *
@@ -184,8 +184,7 @@ public abstract class HostNfcFService extends Service {
                 byte[] packet = dataBundle.getByteArray(KEY_DATA);
                 if (packet != null) {
                     byte[] responsePacket = processNfcFPacket(packet, null);
-                    /* Comment for handle Empty DATA packet*/
-                    //if (responsePacket != null) {
+                    if (responsePacket != null) {
                         if (mNfcService == null) {
                             Log.e(TAG, "Response not sent; service was deactivated.");
                             return;
@@ -201,13 +200,10 @@ public abstract class HostNfcFService extends Service {
                             Log.e("TAG", "Response not sent; RemoteException calling into " +
                                     "NfcService.");
                         }
-                //} else {
-                  //  Log.e(TAG, "Received MSG_COMMAND_PACKET without data.");
-               // }
-             } else {
+                    }
+                } else {
                     Log.e(TAG, "Received MSG_COMMAND_PACKET without data.");
                 }
-
                 break;
             case MSG_RESPONSE_PACKET:
                 if (mNfcService == null) {
