@@ -39,7 +39,7 @@ import java.util.NoSuchElementException;
  *
  * @see <a href="http://simalliance.org">SIMalliance Open Mobile API  v3.0</a>
  */
-public class Session {
+public final class Session {
 
     private final Object mLock = new Object();
     private final SEService mService;
@@ -47,7 +47,8 @@ public class Session {
     private final ISecureElementSession mSession;
     private static final String TAG = "OMAPI.Session";
 
-    Session(SEService service, ISecureElementSession session, Reader reader) {
+    Session(@NonNull SEService service, @NonNull ISecureElementSession session,
+            @NonNull Reader reader) {
         if (service == null || reader == null || session == null) {
             throw new IllegalArgumentException("Parameters cannot be null");
         }
@@ -195,7 +196,8 @@ public class Session {
      *             supported by the device
      * @return an instance of Channel if available or null.
      */
-    public @Nullable Channel openBasicChannel(byte[] aid, byte p2) throws IOException {
+    public @Nullable Channel openBasicChannel(@Nullable byte[] aid, @Nullable byte p2)
+            throws IOException {
         if (!mService.isConnected()) {
             throw new IllegalStateException("service not connected to system");
         }
@@ -244,7 +246,7 @@ public class Session {
      *             supported by the device
      * @return an instance of Channel if available or null.
      */
-    public @Nullable Channel openBasicChannel(byte[] aid) throws IOException {
+    public @Nullable Channel openBasicChannel(@Nullable byte[] aid) throws IOException {
         return openBasicChannel(aid, (byte) 0x00);
     }
 
@@ -300,13 +302,8 @@ public class Session {
      * @return an instance of Channel. Null if the Secure Element is unable to
      *         provide a new logical channel.
      */
-    public @Nullable Channel openLogicalChannel(byte[] aid, byte p2) throws IOException {
-
-        if ((mReader.getName().startsWith("SIM")) && (aid == null)) {
-            Log.e(TAG, "NULL AID not supported on " + mReader.getName());
-            return null;
-        }
-
+    public @Nullable Channel openLogicalChannel(@Nullable byte[] aid, @Nullable byte p2)
+            throws IOException {
         if (!mService.isConnected()) {
             throw new IllegalStateException("service not connected to system");
         }
@@ -358,7 +355,7 @@ public class Session {
      * @return an instance of Channel. Null if the Secure Element is unable to
      *         provide a new logical channel.
      */
-    public @Nullable Channel openLogicalChannel(byte[] aid) throws IOException {
+    public @Nullable Channel openLogicalChannel(@Nullable byte[] aid) throws IOException {
         return openLogicalChannel(aid, (byte) 0x00);
     }
 }

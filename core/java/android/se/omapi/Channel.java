@@ -39,7 +39,7 @@ import java.io.IOException;
  *
  * @see <a href="http://globalplatform.org">GlobalPlatform Open Mobile API</a>
  */
-public class Channel {
+public final class Channel implements java.nio.channels.Channel {
 
     private static final String TAG = "OMAPI.Channel";
     private Session mSession;
@@ -47,7 +47,8 @@ public class Channel {
     private final SEService mService;
     private final Object mLock = new Object();
 
-    Channel(SEService service, Session session, ISecureElementChannel channel) {
+    Channel(@NonNull SEService service, @NonNull Session session,
+            @NonNull ISecureElementChannel channel) {
         if (service == null || session == null || channel == null) {
             throw new IllegalArgumentException("Parameters cannot be null");
         }
@@ -63,7 +64,7 @@ public class Channel {
      * before closing the channel.
      */
     public void close() {
-        if (!isClosed()) {
+        if (isOpen()) {
             synchronized (mLock) {
                 try {
                     mChannel.close();
@@ -75,21 +76,21 @@ public class Channel {
     }
 
     /**
-     * Tells if this channel is closed.
+     * Tells if this channel is open.
      *
-     * @return <code>true</code> if the channel is closed or in case of an error.
-     *         <code>false</code> otherwise.
+     * @return <code>false</code> if the channel is closed or in case of an error.
+     *         <code>true</code> otherwise.
      */
-    public boolean isClosed() {
+    public boolean isOpen() {
         if (!mService.isConnected()) {
             Log.e(TAG, "service not connected to system");
-            return true;
+            return false;
         }
         try {
-            return mChannel.isClosed();
+            return !mChannel.isClosed();
         } catch (RemoteException e) {
             Log.e(TAG, "Exception in isClosed()");
-            return true;
+            return false;
         }
     }
 
@@ -158,7 +159,7 @@ public class Channel {
      * @throws SecurityException if the command is filtered by the security policy.
      * @throws NullPointerException if command is NULL.
      */
-    public @NonNull byte[] transmit(byte[] command) throws IOException {
+    public @NonNull byte[] transmit(@NonNull byte[] command) throws IOException {
         if (!mService.isConnected()) {
             throw new IllegalStateException("service not connected to system");
         }
