@@ -197,6 +197,23 @@ public final class NfcAdapter {
      */
     public static final String EXTRA_ADAPTER_STATE = "android.nfc.extra.ADAPTER_STATE";
 
+    /**
+     * Mandatory byte[] extra field in {@link #ACTION_TRANSACTION_DETECTED}
+     */
+    public static final String EXTRA_AID = "android.nfc.extra.AID";
+
+    /**
+     * Optional byte[] extra field in {@link #ACTION_TRANSACTION_DETECTED}
+     */
+    public static final String EXTRA_DATA = "android.nfc.extra.DATA";
+
+    /**
+     * Mandatory String extra field in {@link #ACTION_TRANSACTION_DETECTED}
+     * Indicates the Secure Element on which the transaction occurred.
+     * eSE1...eSEn for Embedded Secure Elements, SIM1...SIMn for UICC, etc.
+     */
+    public static final String EXTRA_SECURE_ELEMENT_NAME = "android.nfc.extra.SECURE_ELEMENT_NAME";
+
     public static final int STATE_OFF = 1;
     public static final int STATE_TURNING_ON = 2;
     public static final int STATE_ON = 3;
