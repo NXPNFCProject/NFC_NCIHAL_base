@@ -66,8 +66,13 @@ public final class NfcA extends BasicTagTechnology {
     /** @hide */
     public NfcA(Tag tag) throws RemoteException {
         super(tag, TagTechnology.NFC_A);
-        Bundle extras = tag.getTechExtras(TagTechnology.NFC_A);
-        mSak = extras.getShort(EXTRA_SAK);
+        Bundle extras;
+        if(tag.hasTech(TagTechnology.MIFARE_CLASSIC)) {
+            extras = tag.getTechExtras(TagTechnology.MIFARE_CLASSIC);
+            mSak = extras.getShort(EXTRA_SAK);
+        }
+        extras = tag.getTechExtras(TagTechnology.NFC_A);
+        mSak |= extras.getShort(EXTRA_SAK);
         mAtqa = extras.getByteArray(EXTRA_ATQA);
     }
 
