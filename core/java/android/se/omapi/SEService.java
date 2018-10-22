@@ -61,6 +61,14 @@ public final class SEService {
     public static final int NO_SUCH_ELEMENT_ERROR = 2;
 
     /**
+     * Error code used with ServiceSpecificException.
+     * Thrown if RF is observed ON while opening connection to ESE over SPI.
+     *
+     * @hide
+     */
+    public static final int NFC_IN_USE = 3;
+
+    /**
      * Interface to send call-backs to the application when the service is connected.
      */
     public interface OnConnectedListener {
