@@ -67,6 +67,18 @@ public class ApduServiceInfo implements Parcelable {
     protected boolean mOnHost;
 
     /**
+     * Offhost reader name.
+     * eg: SIM, eSE etc
+     */
+    String mOffHostName;
+
+    /**
+     * Offhost reader name from manifest file.
+     * Used for unsetOffHostSecureElement()
+     */
+    final String mStaticOffHostName;
+
+    /**
      * Mapping from category to static AID group
      */
     protected HashMap<String, AidGroup> mStaticAidGroups;
@@ -99,15 +111,17 @@ public class ApduServiceInfo implements Parcelable {
     /**
      * @hide
      */
-    public ApduServiceInfo(ResolveInfo info, boolean onHost, String description,
+    public ApduServiceInfo(ResolveInfo info, String description,
             ArrayList<AidGroup> staticAidGroups, ArrayList<AidGroup> dynamicAidGroups,
             boolean requiresUnlock, int bannerResource, int uid,
-            String settingsActivityName) {
+            String settingsActivityName, String offHost, String staticOffHost) {
         this.mService = info;
         this.mDescription = description;
         this.mStaticAidGroups = new HashMap<String, AidGroup>();
         this.mDynamicAidGroups = new HashMap<String, AidGroup>();
-        this.mOnHost = onHost;
+        this.mOffHostName = offHost;
+        this.mStaticOffHostName = staticOffHost;
+        this.mOnHost = (offHost == null);
         this.mRequiresDeviceUnlock = requiresUnlock;
         for (AidGroup aidGroup : staticAidGroups) {
             this.mStaticAidGroups.put(aidGroup.category, aidGroup);
@@ -168,6 +182,8 @@ public class ApduServiceInfo implements Parcelable {
                         com.android.internal.R.styleable.HostApduService_apduServiceBanner, -1);
                 mSettingsActivityName = sa.getString(
                         com.android.internal.R.styleable.HostApduService_settingsActivity);
+                mOffHostName = null;
+                mStaticOffHostName = mOffHostName;
                 sa.recycle();
             } else {
                 TypedArray sa = res.obtainAttributes(attrs,
@@ -180,6 +196,16 @@ public class ApduServiceInfo implements Parcelable {
                         com.android.internal.R.styleable.OffHostApduService_apduServiceBanner, -1);
                 mSettingsActivityName = sa.getString(
                         com.android.internal.R.styleable.HostApduService_settingsActivity);
+                mOffHostName = sa.getString(
+                        com.android.internal.R.styleable.OffHostApduService_secureElementName);
+                if (mOffHostName != null) {
+                    if (mOffHostName.equals("eSE")) {
+                        mOffHostName = "eSE1";
+                    } else if (mOffHostName.equals("SIM")) {
+                        mOffHostName = "SIM1";
+                    }
+                }
+                mStaticOffHostName = mOffHostName;
                 sa.recycle();
             }
 
@@ -281,6 +307,10 @@ public class ApduServiceInfo implements Parcelable {
     public ComponentName getComponent() {
         return new ComponentName(mService.serviceInfo.packageName,
                 mService.serviceInfo.name);
+    }
+
+    public String getOffHostSecureElement() {
+        return mOffHostName;
     }
 
     /**
@@ -394,6 +424,18 @@ public class ApduServiceInfo implements Parcelable {
         mDynamicAidGroups.put(aidGroup.getCategory(), aidGroup);
     }
 
+    public void setOffHostSecureElement(String offHost) {
+        mOffHostName = offHost;
+    }
+
+    /**
+     * Resets the off host Secure Element to statically defined
+     * by the service in the manifest file.
+     */
+    public void unsetOffHostSecureElement() {
+        mOffHostName = mStaticOffHostName;
+    }
+
     public CharSequence loadLabel(PackageManager pm) {
         return mService.loadLabel(pm);
     }
@@ -469,6 +511,8 @@ public class ApduServiceInfo implements Parcelable {
         mService.writeToParcel(dest, flags);
         dest.writeString(mDescription);
         dest.writeInt(mOnHost ? 1 : 0);
+        dest.writeString(mOffHostName);
+        dest.writeString(mStaticOffHostName);
         dest.writeInt(mStaticAidGroups.size());
         if (mStaticAidGroups.size() > 0) {
             dest.writeTypedList(new ArrayList<AidGroup>(mStaticAidGroups.values()));
@@ -490,6 +534,8 @@ public class ApduServiceInfo implements Parcelable {
             ResolveInfo info = ResolveInfo.CREATOR.createFromParcel(source);
             String description = source.readString();
             boolean onHost = source.readInt() != 0;
+            String offHostName = source.readString();
+            String staticOffHostName = source.readString();
             ArrayList<AidGroup> staticAidGroups = new ArrayList<AidGroup>();
             int numStaticGroups = source.readInt();
             if (numStaticGroups > 0) {
@@ -504,9 +550,9 @@ public class ApduServiceInfo implements Parcelable {
             int bannerResource = source.readInt();
             int uid = source.readInt();
             String settingsActivityName = source.readString();
-            return new ApduServiceInfo(info, onHost, description, staticAidGroups,
+            return new ApduServiceInfo(info, description, staticAidGroups,
                     dynamicAidGroups, requiresUnlock, bannerResource, uid,
-                    settingsActivityName);
+                    settingsActivityName, offHostName, staticOffHostName);
         }
 
         @Override
@@ -518,6 +564,14 @@ public class ApduServiceInfo implements Parcelable {
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("    " + getComponent() +
                 " (Description: " + getDescription() + ")");
+        if (mOnHost) {
+            pw.println("    On Host Service");
+        } else {
+            pw.println("    Off-host Service");
+            pw.println("        " + "Current off-host SE" + mOffHostName
+                    + " static off-host: " + mOffHostName);
+        }
+        pw.println("    Static off-host Secure Element:");
         pw.println("    Static AID groups:");
         for (AidGroup group : mStaticAidGroups.values()) {
             pw.println("        Category: " + group.category);
