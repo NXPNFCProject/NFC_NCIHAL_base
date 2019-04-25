@@ -16,6 +16,7 @@
 
 package android.nfc.cardemulation;
 
+import android.annotation.NonNull;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.app.Activity;
@@ -345,18 +346,124 @@ public final class CardEmulation {
     }
 
     /**
+     * Unsets the off-host Secure Element for the given service.
+     *
+     * <p>Note that this will only remove Secure Element that was dynamically
+     * set using the {@link #setOffHostForService(ComponentName, String)}
+     * and resets it to a value that was statically assigned using manifest.
+     *
+     * <p>Note that you can only unset off-host SE for a service that
+     * is running under the same UID as the caller of this API. Typically
+     * this means you need to call this from the same
+     * package as the service itself, though UIDs can also
+     * be shared between packages using shared UIDs.
+     *
+     * @param service The component name of the service
+     * @return whether the registration was successful.
+     */
+    public boolean unsetOffHostForService(@NonNull ComponentName service) {
+      NfcAdapter adapter = NfcAdapter.getDefaultAdapter(mContext);
+      if (adapter == null) {
+        return false;
+      }
+
+      try {
+        return sService.unsetOffHostForService(mContext.getUserId(), service);
+      } catch (RemoteException e) {
+        // Try one more time
+        recoverService();
+        if (sService == null) {
+          Log.e(TAG, "Failed to recover CardEmulationService.");
+          return false;
+        }
+        try {
+          return sService.unsetOffHostForService(mContext.getUserId(), service);
+        } catch (RemoteException ee) {
+          Log.e(TAG, "Failed to reach CardEmulationService.");
+          return false;
+        }
+      }
+    }
+
+    /**
+     * Sets the off-host Secure Element for the given service.
+     *
+     * <p>If off-host SE was initially set (either statically
+     * through the manifest, or dynamically by using this API),
+     * it will be replaced with this one. All AIDs registered by
+     * this service will be re-routed to this Secure Element if
+     * successful.
+     *
+     * <p>Note that you can only set off-host SE for a service that
+     * is running under the same UID as the caller of this API. Typically
+     * this means you need to call this from the same
+     * package as the service itself, though UIDs can also
+     * be shared between packages using shared UIDs.
+     *
+     * <p>Registeration will be successful only if the Secure Element
+     * exists on the device.
+     *
+     * @param service The component name of the service
+     * @param offHostSecureElement Secure Element to register the AID to
+     * @return whether the registration was successful.
+     */
+    public boolean setOffHostForService(@NonNull ComponentName service,
+                                        @NonNull String offHostSecureElement) {
+      boolean validSecureElement = false;
+
+      NfcAdapter adapter = NfcAdapter.getDefaultAdapter(mContext);
+      if (adapter == null || offHostSecureElement == null) {
+        return false;
+      }
+
+      List<String> validSE = adapter.getSupportedOffHostSecureElements();
+      if ((offHostSecureElement.startsWith("eSE") &&
+           !validSE.contains("eSE")) ||
+          (offHostSecureElement.startsWith("SIM") &&
+           !validSE.contains("SIM"))) {
+        return false;
+      }
+
+      if (offHostSecureElement.equals("eSE")) {
+        offHostSecureElement = "eSE1";
+      } else if (offHostSecureElement.equals("SIM")) {
+        offHostSecureElement = "SIM1";
+      }
+
+      try {
+        return sService.setOffHostForService(mContext.getUserId(), service,
+                                             offHostSecureElement);
+      } catch (RemoteException e) {
+        // Try one more time
+        recoverService();
+        if (sService == null) {
+          Log.e(TAG, "Failed to recover CardEmulationService.");
+          return false;
+        }
+        try {
+          return sService.setOffHostForService(mContext.getUserId(), service,
+                                               offHostSecureElement);
+        } catch (RemoteException ee) {
+          Log.e(TAG, "Failed to reach CardEmulationService.");
+          return false;
+        }
+      }
+    }
+
+    /**
      * Retrieves the currently registered AIDs for the specified
      * category for a service.
      *
      * <p>Note that this will only return AIDs that were dynamically
-     * registered using {@link #registerAidsForService(ComponentName, String, List)}
-     * method. It will *not* return AIDs that were statically registered
+     * registered using {@link #registerAidsForService(ComponentName, String,
+     * List)} method. It will *not* return AIDs that were statically registered
      * in the manifest.
      *
      * @param service The component name of the service
      * @param category The category for which the AIDs were registered,
      *                 e.g. {@link #CATEGORY_PAYMENT}
-     * @return The list of AIDs registered for this category, or null if it couldn't be found.
+     * @return The list of AIDs registered for this category, or null if it
+     * couldn't be found.
      */
     public List<String> getAidsForService(ComponentName service, String category) {
         try {
@@ -606,7 +713,7 @@ public final class CardEmulation {
      * <li>Consist of only hex characters
      * <li>Additionally, we allow an asterisk at the end, to indicate
      *     a prefix
-     * <li>Additinally we allow an # at symbol at the end, to indicate
+     * <li>Additinally we allow an (#) at symbol at the end, to indicate
      *     a subset
      * </ul>
      *
@@ -617,47 +724,22 @@ public final class CardEmulation {
             return false;
 
         // If a prefix/subset AID, the total length must be odd (even # of AID chars + '*')
-        if ((aid.endsWith("*") || aid.endsWith("#"))&& ((aid.length() % 2) == 0)) {
-            Log.e(TAG, "AID " + aid + " is not a valid AID.");
-            return false;
+        if ((aid.endsWith("*") || aid.endsWith("#")) &&
+            ((aid.length() % 2) == 0)) {
+          Log.e(TAG, "AID " + aid + " is not a valid AID.");
+          return false;
         }
 
         // If not a prefix/subset AID, the total length must be even (even # of AID chars)
-        if ((!(aid.endsWith("*")||aid.endsWith("#"))) && ((aid.length() % 2) != 0)) {
-            Log.e(TAG, "AID " + aid + " is not a valid AID.");
-            return false;
+        if ((!(aid.endsWith("*") || aid.endsWith("#"))) &&
+            ((aid.length() % 2) != 0)) {
+          Log.e(TAG, "AID " + aid + " is not a valid AID.");
+          return false;
         }
 
         // Verify hex characters
         if (!aid.matches("[0-9A-Fa-f]{10,32}\\*?\\#?")) {
             Log.e(TAG, "AID " + aid + " is not a valid AID.");
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * A valid APDU pattern according to ISO/IEC 7816-4:
-     * <ul>
-     * <li>Has >= 1 bytes and <=124 bytes (>=2 hex chars and <= 248 hex chars)
-     * <li>Consist of only hex characters
-     * </ul>
-     *
-     * @hide
-     */
-    public static boolean isValidApduString(String apdu) {
-        if (apdu == null)
-            return false;
-
-        if (apdu.length() < 2 || apdu.length() > 248 || ((apdu.length() % 2) != 0)) {
-            Log.e(TAG, "APDU " + apdu + " is not a valid apdu pattern.");
-            return false;
-        }
-
-        // Verify hex characters
-        if (!apdu.matches("[0-9A-Fa-f]{10,32}")) {
-            Log.e(TAG, "APDU " + apdu + " is not a valid apdu pattern.");
             return false;
         }
 

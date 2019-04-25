@@ -191,10 +191,6 @@ public final class MifareClassic extends BasicTagTechnology {
             mType = TYPE_CLASSIC;
             mSize = SIZE_4K;
             break;
-        case 0x19:
-            mType = TYPE_CLASSIC;
-            mSize = SIZE_2K;
-            break;
         case 0x28:
             mType = TYPE_CLASSIC;
             mSize = SIZE_1K;

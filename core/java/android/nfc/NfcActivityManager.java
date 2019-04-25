@@ -396,6 +396,7 @@ public final class NfcActivityManager extends IAppCallback.Stub
                         uri = ContentProvider.maybeAddUserId(uri, UserHandle.myUserId());
                         validUris.add(uri);
                     }
+
                     uris = validUris.toArray(new Uri[validUris.size()]);
                 }
             }

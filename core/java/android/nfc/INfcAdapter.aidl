@@ -17,7 +17,7 @@
   *
   *  The original Work has been changed by NXP Semiconductors.
   *
-  *  Copyright (C) 2015-2018 NXP Semiconductors
+  *  Copyright (C) 2015-2019 NXP Semiconductors
   *
   *  Licensed under the Apache License, Version 2.0 (the "License");
   *  you may not use this file except in compliance with the License.
@@ -51,7 +51,6 @@ import android.nfc.INfcUnlockHandler;
 import android.nfc.ITagRemovedCallback;
 import android.nfc.INfcDta;
 import android.os.Bundle;
-import android.os.IBinder;
 
 /**
  * @hide
@@ -73,7 +72,6 @@ interface INfcAdapter
     boolean isNdefPushEnabled();
     void pausePolling(int timeoutInMs);
     void resumePolling();
-    void verifyNfcPermission();
 
     void setForegroundDispatch(in PendingIntent intent,
             in IntentFilter[] filters, in TechListParcel techLists);
@@ -87,6 +85,12 @@ interface INfcAdapter
 
     void setReaderMode (IBinder b, IAppCallback callback, int flags, in Bundle extras);
     void setP2pModes(int initatorModes, int targetModes);
+
     void addNfcUnlockHandler(INfcUnlockHandler unlockHandler, in int[] techList);
     void removeNfcUnlockHandler(INfcUnlockHandler unlockHandler);
+
+    void verifyNfcPermission();
+    boolean isNfcSecureEnabled();
+    boolean deviceSupportsNfcSecure();
+    boolean setNfcSecure(boolean enable);
 }

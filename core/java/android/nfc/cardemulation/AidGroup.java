@@ -83,10 +83,10 @@ public class AidGroup implements Parcelable {
         this.description = null;
     }
 
-    AidGroup(String category, String description) {
-        this.aids = new ArrayList<String>();
-        this.category = category;
-        this.description = description;
+    public AidGroup(String category, String description) {
+      this.aids = new ArrayList<String>();
+      this.category = category;
+      this.description = description;
     }
 
     /**

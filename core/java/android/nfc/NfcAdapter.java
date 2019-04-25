@@ -16,6 +16,7 @@
 
 package android.nfc;
 
+import android.annotation.NonNull;
 import android.annotation.RequiresPermission;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
@@ -41,7 +42,9 @@ import android.os.ServiceManager;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Represents the local NFC adapter.
@@ -147,12 +150,6 @@ public final class NfcAdapter {
     public static final String ACTION_TAG_DISCOVERED = "android.nfc.action.TAG_DISCOVERED";
 
     /**
-     * Broadcast to only the activity that handles ACTION_TAG_DISCOVERED
-     * @hide
-     */
-    public static final String ACTION_TAG_LEFT_FIELD = "android.nfc.action.TAG_LOST";
-
-    /**
      * Broadcast Action: Intent to notify an application that an transaction event has occurred
      * on the Secure Element.
      *
@@ -164,6 +161,13 @@ public final class NfcAdapter {
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String ACTION_TRANSACTION_DETECTED =
             "android.nfc.action.TRANSACTION_DETECTED";
+
+    /**
+     * Broadcast to only the activity that handles ACTION_TAG_DISCOVERED
+     * @hide
+     */
+    public static final String ACTION_TAG_LEFT_FIELD =
+        "android.nfc.action.TAG_LOST";
 
     /**
      * Mandatory extra containing the {@link Tag} that was discovered for the
@@ -225,7 +229,8 @@ public final class NfcAdapter {
      * Indicates the Secure Element on which the transaction occurred.
      * eSE1...eSEn for Embedded Secure Elements, SIM1...SIMn for UICC, etc.
      */
-    public static final String EXTRA_SECURE_ELEMENT_NAME  = "android.nfc.extra.SECURE_ELEMENT_NAME";
+    public static final String EXTRA_SECURE_ELEMENT_NAME =
+        "android.nfc.extra.SECURE_ELEMENT_NAME";
 
     public static final int STATE_OFF = 1;
     public static final int STATE_TURNING_ON = 2;
@@ -483,6 +488,40 @@ public final class NfcAdapter {
             Log.e(TAG, "Package manager query failed, assuming no NFC feature", e);
             return false;
         }
+    }
+
+    /**
+     * Return list of Secure Elements which support off host card emulation.
+     *
+     * @return List<String> containing secure elements on the device which
+     * supports off host card emulation. eSE for Embedded secure element, SIM
+     * for UICC and so on.
+     */
+    public @NonNull List<String> getSupportedOffHostSecureElements() {
+      List<String> offHostSE = new ArrayList<String>();
+      IPackageManager pm = ActivityThread.getPackageManager();
+      if (pm == null) {
+        Log.e(TAG,
+              "Cannot get package manager, assuming no off-host CE feature");
+        return offHostSE;
+      }
+      try {
+        if (pm.hasSystemFeature(
+                PackageManager.FEATURE_NFC_OFF_HOST_CARD_EMULATION_UICC, 0)) {
+          offHostSE.add("SIM");
+        }
+        if (pm.hasSystemFeature(
+                PackageManager.FEATURE_NFC_OFF_HOST_CARD_EMULATION_ESE, 0)) {
+          offHostSE.add("eSE");
+        }
+      } catch (RemoteException e) {
+        Log.e(TAG,
+              "Package manager query failed, assuming no off-host CE feature",
+              e);
+        offHostSE.clear();
+        return offHostSE;
+      }
+      return offHostSE;
     }
 
     /**
@@ -1594,6 +1633,63 @@ public final class NfcAdapter {
         mNfcActivityManager.setNdefPushMessage(activity, null, 0);
         mNfcActivityManager.setNdefPushMessageCallback(activity, null, 0);
         mNfcActivityManager.setOnNdefPushCompleteCallback(activity, null);
+    }
+
+    /**
+     * Sets Secure NFC feature.
+     * <p>This API is for the Settings application.
+     * @hide
+     */
+    @SystemApi
+    @RequiresPermission(android.Manifest.permission.WRITE_SECURE_SETTINGS)
+    public boolean setNfcSecure(boolean enable) {
+      if (!sHasNfcFeature) {
+        throw new UnsupportedOperationException();
+      }
+      try {
+        return sService.setNfcSecure(enable);
+      } catch (RemoteException e) {
+        attemptDeadServiceRecovery(e);
+        return false;
+      }
+    }
+
+    /**
+     * Checks if the device supports Secure NFC functionality.
+     *
+     * @return True if device supports Secure NFC, false otherwise
+     * @throws UnsupportedOperationException if FEATURE_NFC is unavailable.
+     */
+    public boolean deviceSupportsNfcSecure() {
+      if (!sHasNfcFeature) {
+        throw new UnsupportedOperationException();
+      }
+      try {
+        return sService.deviceSupportsNfcSecure();
+      } catch (RemoteException e) {
+        attemptDeadServiceRecovery(e);
+        return false;
+      }
+    }
+
+    /**
+     * Checks Secure NFC feature is enabled.
+     *
+     * @return True if device supports Secure NFC is enabled, false otherwise
+     * @throws UnsupportedOperationException if FEATURE_NFC is unavailable.
+     * @throws UnsupportedOperationException if device doesn't support
+     *         Secure NFC functionality. {@link #deviceSupportsNfcSecure}
+     */
+    public boolean isNfcSecureEnabled() {
+      if (!sHasNfcFeature) {
+        throw new UnsupportedOperationException();
+      }
+      try {
+        return sService.isNfcSecureEnabled();
+      } catch (RemoteException e) {
+        attemptDeadServiceRecovery(e);
+        return false;
+      }
     }
 
     /**
