@@ -64,7 +64,7 @@
 | android-9.0.0_r3              |  9.5.0 (PN557) |  NFC_NCIHALx_AR1800.9.5.0_OpnSrc |
 | android-9.0.0_r3              |  9.6.0 (PN80T/PN81T) |  NFC_NCIHALx_AR18C0.9.6.0_OpnSrc || android-9.0.0_r3              |  9.6.0 (PN80T/PN81T) |  NFC_NCIHALx_AR18C0.9.6.0_OpnSrc || android-9.0.0_r3              |  9.6.0 (PN80T/PN81T) |  NFC_NCIHALx_AR18C0.9.6.0_OpnSrc |
 
-#### Supported Versions on "br_android_ncihalx_q branch
+#### Supported Versions on "br_android_ncihalx_q" branch
 
 | Android Version        | NXP Release          | NXP Tag  |
 | :-------------: |:---------------------:| :-----:|
