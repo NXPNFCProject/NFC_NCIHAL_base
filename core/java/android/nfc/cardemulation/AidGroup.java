@@ -1,18 +1,22 @@
-/*
- * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/******************************************************************************
+  *
+  *  The original Work has been changed by NXP Semiconductors.
+  *
+  *  Copyright (C) 2015-2019 NXP Semiconductors
+  *
+  *  Licensed under the Apache License, Version 2.0 (the "License");
+  *  you may not use this file except in compliance with the License.
+  *  You may obtain a copy of the License at
+  *
+  *  http://www.apache.org/licenses/LICENSE-2.0
+  *
+  *  Unless required by applicable law or agreed to in writing, software
+  *  distributed under the License is distributed on an "AS IS" BASIS,
+  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  *  See the License for the specific language governing permissions and
+  *  limitations under the License.
+  *
+ ******************************************************************************/
 
 package android.nfc.cardemulation;
 
@@ -24,6 +28,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
+import android.annotation.UnsupportedAppUsage;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -45,8 +50,11 @@ public class AidGroup implements Parcelable {
 
     static final String TAG = "AidGroup";
 
+    @UnsupportedAppUsage
     protected List<String> aids;
+    @UnsupportedAppUsage
     protected String category;
+    @UnsupportedAppUsage
     protected String description;
 
     /**
@@ -79,6 +87,7 @@ public class AidGroup implements Parcelable {
         this.description = null;
     }
 
+    @UnsupportedAppUsage
     public AidGroup(String category, String description) {
         this.aids = new ArrayList<String>();
         this.category = category;
@@ -88,6 +97,7 @@ public class AidGroup implements Parcelable {
     /**
      * @return the category of this AID group
      */
+    @UnsupportedAppUsage
     public String getCategory() {
         return category;
     }
@@ -95,6 +105,7 @@ public class AidGroup implements Parcelable {
     /**
      * @return the list of AIDs in this group
      */
+    @UnsupportedAppUsage
     public List<String> getAids() {
         return aids;
     }
@@ -124,6 +135,7 @@ public class AidGroup implements Parcelable {
         }
     }
 
+    @UnsupportedAppUsage
     public static final Parcelable.Creator<AidGroup> CREATOR =
             new Parcelable.Creator<AidGroup>() {
 
@@ -144,6 +156,7 @@ public class AidGroup implements Parcelable {
         }
     };
 
+    @UnsupportedAppUsage
     static public AidGroup createFromXml(XmlPullParser parser) throws XmlPullParserException, IOException {
         String category = null;
         ArrayList<String> aids = new ArrayList<String>();
@@ -185,6 +198,7 @@ public class AidGroup implements Parcelable {
         return group;
     }
 
+    @UnsupportedAppUsage
     public void writeAsXml(XmlSerializer out) throws IOException {
         out.startTag(null, "aid-group");
         out.attribute(null, "category", category);
