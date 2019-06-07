@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package android.nfc.cardemulation;
 
 import android.annotation.SdkConstant;
@@ -30,7 +31,7 @@ import android.os.IBinder;
  * <div class="special reference">
  * <h3>Developer Guide</h3>
  * For a general introduction into the topic of card emulation,
- * please read the <a href="{@docRoot}guide/topics/nfc/ce.html">
+ * please read the <a href="{@docRoot}guide/topics/connectivity/nfc/hce.html">
  * NFC card emulation developer guide.</a></p>
  * </div>
  *

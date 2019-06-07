@@ -16,6 +16,7 @@
 
 package android.nfc;
 
+import android.annotation.UnsupportedAppUsage;
 import android.app.Activity;
 import android.app.Application;
 import android.content.ContentProvider;
@@ -45,6 +46,7 @@ public final class NfcActivityManager extends IAppCallback.Stub
     static final String TAG = NfcAdapter.TAG;
     static final Boolean DBG = false;
 
+    @UnsupportedAppUsage
     final NfcAdapter mAdapter;
 
     // All objects in the lists are protected by this
@@ -393,7 +395,7 @@ public final class NfcActivityManager extends IAppCallback.Stub
                                     "either scheme file or scheme content");
                             continue;
                         }
-                        uri = ContentProvider.maybeAddUserId(uri, UserHandle.myUserId());
+                        uri = ContentProvider.maybeAddUserId(uri, activity.getUserId());
                         validUris.add(uri);
                     }
 
@@ -410,7 +412,7 @@ public final class NfcActivityManager extends IAppCallback.Stub
         } finally {
             Binder.restoreCallingIdentity(ident);
         }
-        return new BeamShareData(message, uris, new UserHandle(UserHandle.myUserId()), flags);
+        return new BeamShareData(message, uris, activity.getUser(), flags);
     }
 
     /** Callback from NFC service, usually on binder thread */

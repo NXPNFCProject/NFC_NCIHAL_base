@@ -28,7 +28,6 @@ import android.content.pm.PackageManager;
 import android.nfc.INfcCardEmulation;
 import android.nfc.NfcAdapter;
 import android.os.RemoteException;
-import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.util.Log;
@@ -202,7 +201,7 @@ public final class CardEmulation {
      */
     public boolean isDefaultServiceForCategory(ComponentName service, String category) {
         try {
-            return sService.isDefaultServiceForCategory(UserHandle.myUserId(), service, category);
+            return sService.isDefaultServiceForCategory(mContext.getUserId(), service, category);
         } catch (RemoteException e) {
             // Try one more time
             recoverService();
@@ -211,7 +210,7 @@ public final class CardEmulation {
                 return false;
             }
             try {
-                return sService.isDefaultServiceForCategory(UserHandle.myUserId(), service,
+                return sService.isDefaultServiceForCategory(mContext.getUserId(), service,
                         category);
             } catch (RemoteException ee) {
                 Log.e(TAG, "Failed to recover CardEmulationService.");
@@ -233,7 +232,7 @@ public final class CardEmulation {
      */
     public boolean isDefaultServiceForAid(ComponentName service, String aid) {
         try {
-            return sService.isDefaultServiceForAid(UserHandle.myUserId(), service, aid);
+            return sService.isDefaultServiceForAid(mContext.getUserId(), service, aid);
         } catch (RemoteException e) {
             // Try one more time
             recoverService();
@@ -242,7 +241,7 @@ public final class CardEmulation {
                 return false;
             }
             try {
-                return sService.isDefaultServiceForAid(UserHandle.myUserId(), service, aid);
+                return sService.isDefaultServiceForAid(mContext.getUserId(), service, aid);
             } catch (RemoteException ee) {
                 Log.e(TAG, "Failed to reach CardEmulationService.");
                 return false;
@@ -327,7 +326,7 @@ public final class CardEmulation {
             List<String> aids) {
         AidGroup aidGroup = new AidGroup(aids, category);
         try {
-            return sService.registerAidGroupForService(UserHandle.myUserId(), service, aidGroup);
+            return sService.registerAidGroupForService(mContext.getUserId(), service, aidGroup);
         } catch (RemoteException e) {
             // Try one more time
             recoverService();
@@ -336,7 +335,7 @@ public final class CardEmulation {
                 return false;
             }
             try {
-                return sService.registerAidGroupForService(UserHandle.myUserId(), service,
+                return sService.registerAidGroupForService(mContext.getUserId(), service,
                         aidGroup);
             } catch (RemoteException ee) {
                 Log.e(TAG, "Failed to reach CardEmulationService.");
@@ -362,27 +361,27 @@ public final class CardEmulation {
      * @return whether the registration was successful.
      */
     public boolean unsetOffHostForService(@NonNull ComponentName service) {
-      NfcAdapter adapter = NfcAdapter.getDefaultAdapter(mContext);
-      if (adapter == null) {
-        return false;
-      }
+        NfcAdapter adapter = NfcAdapter.getDefaultAdapter(mContext);
+        if (adapter == null) {
+            return false;
+        }
 
-      try {
-        return sService.unsetOffHostForService(mContext.getUserId(), service);
-      } catch (RemoteException e) {
-        // Try one more time
-        recoverService();
-        if (sService == null) {
-          Log.e(TAG, "Failed to recover CardEmulationService.");
-          return false;
-        }
         try {
-          return sService.unsetOffHostForService(mContext.getUserId(), service);
-        } catch (RemoteException ee) {
-          Log.e(TAG, "Failed to reach CardEmulationService.");
-          return false;
+            return sService.unsetOffHostForService(mContext.getUserId(), service);
+        } catch (RemoteException e) {
+            // Try one more time
+            recoverService();
+            if (sService == null) {
+                Log.e(TAG, "Failed to recover CardEmulationService.");
+                return false;
+            }
+            try {
+                return sService.unsetOffHostForService(mContext.getUserId(), service);
+            } catch (RemoteException ee) {
+                Log.e(TAG, "Failed to reach CardEmulationService.");
+                return false;
+            }
         }
-      }
     }
 
     /**
@@ -408,46 +407,44 @@ public final class CardEmulation {
      * @return whether the registration was successful.
      */
     public boolean setOffHostForService(@NonNull ComponentName service,
-                                        @NonNull String offHostSecureElement) {
-      boolean validSecureElement = false;
+            @NonNull String offHostSecureElement) {
+        boolean validSecureElement = false;
 
-      NfcAdapter adapter = NfcAdapter.getDefaultAdapter(mContext);
-      if (adapter == null || offHostSecureElement == null) {
-        return false;
-      }
-
-      List<String> validSE = adapter.getSupportedOffHostSecureElements();
-      if ((offHostSecureElement.startsWith("eSE") &&
-           !validSE.contains("eSE")) ||
-          (offHostSecureElement.startsWith("SIM") &&
-           !validSE.contains("SIM"))) {
-        return false;
-      }
-
-      if (offHostSecureElement.equals("eSE")) {
-        offHostSecureElement = "eSE1";
-      } else if (offHostSecureElement.equals("SIM")) {
-        offHostSecureElement = "SIM1";
-      }
-
-      try {
-        return sService.setOffHostForService(mContext.getUserId(), service,
-                                             offHostSecureElement);
-      } catch (RemoteException e) {
-        // Try one more time
-        recoverService();
-        if (sService == null) {
-          Log.e(TAG, "Failed to recover CardEmulationService.");
-          return false;
+        NfcAdapter adapter = NfcAdapter.getDefaultAdapter(mContext);
+        if (adapter == null || offHostSecureElement == null) {
+            return false;
         }
+
+        List<String> validSE = adapter.getSupportedOffHostSecureElements();
+        if ((offHostSecureElement.startsWith("eSE") && !validSE.contains("eSE"))
+                || (offHostSecureElement.startsWith("SIM") && !validSE.contains("SIM"))) {
+            return false;
+        }
+
+        if (offHostSecureElement.equals("eSE")) {
+            offHostSecureElement = "eSE1";
+        } else if (offHostSecureElement.equals("SIM")) {
+            offHostSecureElement = "SIM1";
+        }
+
         try {
-          return sService.setOffHostForService(mContext.getUserId(), service,
-                                               offHostSecureElement);
-        } catch (RemoteException ee) {
-          Log.e(TAG, "Failed to reach CardEmulationService.");
-          return false;
+            return sService.setOffHostForService(mContext.getUserId(), service,
+                offHostSecureElement);
+        } catch (RemoteException e) {
+            // Try one more time
+            recoverService();
+            if (sService == null) {
+                Log.e(TAG, "Failed to recover CardEmulationService.");
+                return false;
+            }
+            try {
+                return sService.setOffHostForService(mContext.getUserId(), service,
+                        offHostSecureElement);
+            } catch (RemoteException ee) {
+                Log.e(TAG, "Failed to reach CardEmulationService.");
+                return false;
+            }
         }
-      }
     }
 
     /**
@@ -455,19 +452,18 @@ public final class CardEmulation {
      * category for a service.
      *
      * <p>Note that this will only return AIDs that were dynamically
-     * registered using {@link #registerAidsForService(ComponentName, String,
-     * List)} method. It will *not* return AIDs that were statically registered
+     * registered using {@link #registerAidsForService(ComponentName, String, List)}
+     * method. It will *not* return AIDs that were statically registered
      * in the manifest.
      *
      * @param service The component name of the service
      * @param category The category for which the AIDs were registered,
      *                 e.g. {@link #CATEGORY_PAYMENT}
-     * @return The list of AIDs registered for this category, or null if it
-     * couldn't be found.
+     * @return The list of AIDs registered for this category, or null if it couldn't be found.
      */
     public List<String> getAidsForService(ComponentName service, String category) {
         try {
-            AidGroup group =  sService.getAidGroupForService(UserHandle.myUserId(), service,
+            AidGroup group =  sService.getAidGroupForService(mContext.getUserId(), service,
                     category);
             return (group != null ? group.getAids() : null);
         } catch (RemoteException e) {
@@ -477,7 +473,7 @@ public final class CardEmulation {
                 return null;
             }
             try {
-                AidGroup group = sService.getAidGroupForService(UserHandle.myUserId(), service,
+                AidGroup group = sService.getAidGroupForService(mContext.getUserId(), service,
                         category);
                 return (group != null ? group.getAids() : null);
             } catch (RemoteException ee) {
@@ -504,7 +500,7 @@ public final class CardEmulation {
      */
     public boolean removeAidsForService(ComponentName service, String category) {
         try {
-            return sService.removeAidGroupForService(UserHandle.myUserId(), service, category);
+            return sService.removeAidGroupForService(mContext.getUserId(), service, category);
         } catch (RemoteException e) {
             // Try one more time
             recoverService();
@@ -513,7 +509,7 @@ public final class CardEmulation {
                 return false;
             }
             try {
-                return sService.removeAidGroupForService(UserHandle.myUserId(), service, category);
+                return sService.removeAidGroupForService(mContext.getUserId(), service, category);
             } catch (RemoteException ee) {
                 Log.e(TAG, "Failed to reach CardEmulationService.");
                 return false;
@@ -644,7 +640,7 @@ public final class CardEmulation {
      */
     public boolean setDefaultServiceForCategory(ComponentName service, String category) {
         try {
-            return sService.setDefaultServiceForCategory(UserHandle.myUserId(), service, category);
+            return sService.setDefaultServiceForCategory(mContext.getUserId(), service, category);
         } catch (RemoteException e) {
             // Try one more time
             recoverService();
@@ -653,7 +649,7 @@ public final class CardEmulation {
                 return false;
             }
             try {
-                return sService.setDefaultServiceForCategory(UserHandle.myUserId(), service,
+                return sService.setDefaultServiceForCategory(mContext.getUserId(), service,
                         category);
             } catch (RemoteException ee) {
                 Log.e(TAG, "Failed to reach CardEmulationService.");
@@ -667,7 +663,7 @@ public final class CardEmulation {
      */
     public boolean setDefaultForNextTap(ComponentName service) {
         try {
-            return sService.setDefaultForNextTap(UserHandle.myUserId(), service);
+            return sService.setDefaultForNextTap(mContext.getUserId(), service);
         } catch (RemoteException e) {
             // Try one more time
             recoverService();
@@ -676,7 +672,7 @@ public final class CardEmulation {
                 return false;
             }
             try {
-                return sService.setDefaultForNextTap(UserHandle.myUserId(), service);
+                return sService.setDefaultForNextTap(mContext.getUserId(), service);
             } catch (RemoteException ee) {
                 Log.e(TAG, "Failed to reach CardEmulationService.");
                 return false;
@@ -689,7 +685,7 @@ public final class CardEmulation {
      */
     public List<ApduServiceInfo> getServices(String category) {
         try {
-            return sService.getServices(UserHandle.myUserId(), category);
+            return sService.getServices(mContext.getUserId(), category);
         } catch (RemoteException e) {
             // Try one more time
             recoverService();
@@ -698,7 +694,7 @@ public final class CardEmulation {
                 return null;
             }
             try {
-                return sService.getServices(UserHandle.myUserId(), category);
+                return sService.getServices(mContext.getUserId(), category);
             } catch (RemoteException ee) {
                 Log.e(TAG, "Failed to reach CardEmulationService.");
                 return null;
@@ -724,17 +720,15 @@ public final class CardEmulation {
             return false;
 
         // If a prefix/subset AID, the total length must be odd (even # of AID chars + '*')
-        if ((aid.endsWith("*") || aid.endsWith("#")) &&
-            ((aid.length() % 2) == 0)) {
-          Log.e(TAG, "AID " + aid + " is not a valid AID.");
-          return false;
+        if ((aid.endsWith("*") || aid.endsWith("#")) && ((aid.length() % 2) == 0)) {
+            Log.e(TAG, "AID " + aid + " is not a valid AID.");
+            return false;
         }
 
         // If not a prefix/subset AID, the total length must be even (even # of AID chars)
-        if ((!(aid.endsWith("*") || aid.endsWith("#"))) &&
-            ((aid.length() % 2) != 0)) {
-          Log.e(TAG, "AID " + aid + " is not a valid AID.");
-          return false;
+        if ((!(aid.endsWith("*") || aid.endsWith("#"))) && ((aid.length() % 2) != 0)) {
+            Log.e(TAG, "AID " + aid + " is not a valid AID.");
+            return false;
         }
 
         // Verify hex characters

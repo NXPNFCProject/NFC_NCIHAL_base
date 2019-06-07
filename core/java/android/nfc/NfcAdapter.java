@@ -21,6 +21,7 @@ import android.annotation.RequiresPermission;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.annotation.SystemApi;
+import android.annotation.UnsupportedAppUsage;
 import android.app.Activity;
 import android.app.ActivityThread;
 import android.app.OnActivityPausedListener;
@@ -166,8 +167,7 @@ public final class NfcAdapter {
      * Broadcast to only the activity that handles ACTION_TAG_DISCOVERED
      * @hide
      */
-    public static final String ACTION_TAG_LEFT_FIELD =
-        "android.nfc.action.TAG_LOST";
+    public static final String ACTION_TAG_LEFT_FIELD = "android.nfc.action.TAG_LOST";
 
     /**
      * Mandatory extra containing the {@link Tag} that was discovered for the
@@ -229,8 +229,7 @@ public final class NfcAdapter {
      * Indicates the Secure Element on which the transaction occurred.
      * eSE1...eSEn for Embedded Secure Elements, SIM1...SIMn for UICC, etc.
      */
-    public static final String EXTRA_SECURE_ELEMENT_NAME =
-        "android.nfc.extra.SECURE_ELEMENT_NAME";
+    public static final String EXTRA_SECURE_ELEMENT_NAME = "android.nfc.extra.SECURE_ELEMENT_NAME";
 
     public static final int STATE_OFF = 1;
     public static final int STATE_TURNING_ON = 2;
@@ -326,10 +325,12 @@ public final class NfcAdapter {
     // Guarded by NfcAdapter.class
     static boolean sIsInitialized = false;
     static boolean sHasNfcFeature;
+    static boolean sHasBeamFeature;
 
     // Final after first constructor, except for
     // attemptDeadServiceRecovery() when NFC crashes - we accept a best effort
     // recovery
+    @UnsupportedAppUsage
     static INfcAdapter sService;
     static INfcTag sTagService;
     static INfcCardEmulation sCardEmulationService;
@@ -449,6 +450,25 @@ public final class NfcAdapter {
         public boolean onUnlockAttempted(Tag tag);
     }
 
+    /**
+     * Helper to check if this device has FEATURE_NFC_BEAM, but without using
+     * a context.
+     * Equivalent to
+     * context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC_BEAM)
+     */
+    private static boolean hasBeamFeature() {
+        IPackageManager pm = ActivityThread.getPackageManager();
+        if (pm == null) {
+            Log.e(TAG, "Cannot get package manager, assuming no Android Beam feature");
+            return false;
+        }
+        try {
+            return pm.hasSystemFeature(PackageManager.FEATURE_NFC_BEAM, 0);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Package manager query failed, assuming no Android Beam feature", e);
+            return false;
+        }
+    }
 
     /**
      * Helper to check if this device has FEATURE_NFC, but without using
@@ -493,35 +513,30 @@ public final class NfcAdapter {
     /**
      * Return list of Secure Elements which support off host card emulation.
      *
-     * @return List<String> containing secure elements on the device which
-     * supports off host card emulation. eSE for Embedded secure element, SIM
-     * for UICC and so on.
+     * @return List<String> containing secure elements on the device which supports
+     *                      off host card emulation. eSE for Embedded secure element,
+     *                      SIM for UICC and so on.
      */
     public @NonNull List<String> getSupportedOffHostSecureElements() {
-      List<String> offHostSE = new ArrayList<String>();
-      IPackageManager pm = ActivityThread.getPackageManager();
-      if (pm == null) {
-        Log.e(TAG,
-              "Cannot get package manager, assuming no off-host CE feature");
-        return offHostSE;
-      }
-      try {
-        if (pm.hasSystemFeature(
-                PackageManager.FEATURE_NFC_OFF_HOST_CARD_EMULATION_UICC, 0)) {
-          offHostSE.add("SIM");
+        List<String> offHostSE = new ArrayList<String>();
+        IPackageManager pm = ActivityThread.getPackageManager();
+        if (pm == null) {
+            Log.e(TAG, "Cannot get package manager, assuming no off-host CE feature");
+            return offHostSE;
         }
-        if (pm.hasSystemFeature(
-                PackageManager.FEATURE_NFC_OFF_HOST_CARD_EMULATION_ESE, 0)) {
-          offHostSE.add("eSE");
+        try {
+            if (pm.hasSystemFeature(PackageManager.FEATURE_NFC_OFF_HOST_CARD_EMULATION_UICC, 0)) {
+                offHostSE.add("SIM");
+            }
+            if (pm.hasSystemFeature(PackageManager.FEATURE_NFC_OFF_HOST_CARD_EMULATION_ESE, 0)) {
+                offHostSE.add("eSE");
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "Package manager query failed, assuming no off-host CE feature", e);
+            offHostSE.clear();
+            return offHostSE;
         }
-      } catch (RemoteException e) {
-        Log.e(TAG,
-              "Package manager query failed, assuming no off-host CE feature",
-              e);
-        offHostSE.clear();
         return offHostSE;
-      }
-      return offHostSE;
     }
 
     /**
@@ -529,9 +544,11 @@ public final class NfcAdapter {
      * or throws if NFC is not available.
      * @hide
      */
+    @UnsupportedAppUsage
     public static synchronized NfcAdapter getNfcAdapter(Context context) {
         if (!sIsInitialized) {
             sHasNfcFeature = hasNfcFeature();
+            sHasBeamFeature = hasBeamFeature();
             boolean hasHceFeature = hasNfcHceFeature();
             /* is this device meant to have NFC */
             if (!sHasNfcFeature && !hasHceFeature) {
@@ -632,6 +649,7 @@ public final class NfcAdapter {
      * @hide
      */
     @Deprecated
+    @UnsupportedAppUsage
     public static NfcAdapter getDefaultAdapter() {
         // introduced in API version 9 (GB 2.3)
         // deprecated in API version 10 (GB 2.3.3)
@@ -654,6 +672,7 @@ public final class NfcAdapter {
     /**
      * @hide
      */
+    @UnsupportedAppUsage
     public Context getContext() {
         return mContext;
     }
@@ -662,6 +681,7 @@ public final class NfcAdapter {
      * Returns the binder interface to the service.
      * @hide
      */
+    @UnsupportedAppUsage
     public INfcAdapter getService() {
         isEnabled();  // NOP call to recover sService if it is stale
         return sService;
@@ -715,6 +735,7 @@ public final class NfcAdapter {
      * NFC service dead - attempt best effort recovery
      * @hide
      */
+    @UnsupportedAppUsage
     public void attemptDeadServiceRecovery(Exception e) {
         Log.e(TAG, "NFC service dead - attempting to recover", e);
         INfcAdapter service = getServiceInterface();
@@ -785,6 +806,7 @@ public final class NfcAdapter {
      *
      * @hide
      */
+    @UnsupportedAppUsage
     public int getAdapterState() {
         try {
             return sService.getState();
@@ -958,6 +980,9 @@ public final class NfcAdapter {
             if (!sHasNfcFeature) {
                 throw new UnsupportedOperationException();
             }
+            if (!sHasBeamFeature) {
+                return;
+            }
         }
         if (activity == null) {
             throw new NullPointerException("activity cannot be null");
@@ -1039,6 +1064,9 @@ public final class NfcAdapter {
         synchronized (NfcAdapter.class) {
             if (!sHasNfcFeature) {
                 throw new UnsupportedOperationException();
+            }
+            if (!sHasBeamFeature) {
+                return;
             }
         }
         if (activity == null) {
@@ -1124,6 +1152,9 @@ public final class NfcAdapter {
         synchronized (NfcAdapter.class) {
             if (!sHasNfcFeature) {
                 throw new UnsupportedOperationException();
+            }
+            if (!sHasBeamFeature) {
+                return;
             }
         }
         int targetSdkVersion = getSdkVersion();
@@ -1238,6 +1269,9 @@ public final class NfcAdapter {
             if (!sHasNfcFeature) {
                 throw new UnsupportedOperationException();
             }
+            if (!sHasBeamFeature) {
+                return;
+            }
         }
         int targetSdkVersion = getSdkVersion();
         try {
@@ -1266,6 +1300,7 @@ public final class NfcAdapter {
     /**
      * @hide
      */
+    @UnsupportedAppUsage
     public void setNdefPushMessageCallback(CreateNdefMessageCallback callback, Activity activity,
             int flags) {
         if (activity == null) {
@@ -1317,6 +1352,9 @@ public final class NfcAdapter {
         synchronized (NfcAdapter.class) {
             if (!sHasNfcFeature) {
                 throw new UnsupportedOperationException();
+            }
+            if (!sHasBeamFeature) {
+                return;
             }
         }
         int targetSdkVersion = getSdkVersion();
@@ -1528,6 +1566,9 @@ public final class NfcAdapter {
             if (!sHasNfcFeature) {
                 throw new UnsupportedOperationException();
             }
+            if (!sHasBeamFeature) {
+                return false;
+            }
         }
         if (activity == null) {
             throw new NullPointerException("activity may not be null.");
@@ -1591,6 +1632,9 @@ public final class NfcAdapter {
             if (!sHasNfcFeature) {
                 throw new UnsupportedOperationException();
             }
+            if (!sHasBeamFeature) {
+                return;
+            }
         }
         if (activity == null || message == null) {
             throw new NullPointerException();
@@ -1625,6 +1669,9 @@ public final class NfcAdapter {
             if (!sHasNfcFeature) {
                 throw new UnsupportedOperationException();
             }
+            if (!sHasBeamFeature) {
+                return;
+            }
         }
         if (activity == null) {
             throw new NullPointerException();
@@ -1643,15 +1690,15 @@ public final class NfcAdapter {
     @SystemApi
     @RequiresPermission(android.Manifest.permission.WRITE_SECURE_SETTINGS)
     public boolean setNfcSecure(boolean enable) {
-      if (!sHasNfcFeature) {
-        throw new UnsupportedOperationException();
-      }
-      try {
-        return sService.setNfcSecure(enable);
-      } catch (RemoteException e) {
-        attemptDeadServiceRecovery(e);
-        return false;
-      }
+        if (!sHasNfcFeature) {
+            throw new UnsupportedOperationException();
+        }
+        try {
+            return sService.setNfcSecure(enable);
+        } catch (RemoteException e) {
+            attemptDeadServiceRecovery(e);
+            return false;
+        }
     }
 
     /**
@@ -1661,15 +1708,15 @@ public final class NfcAdapter {
      * @throws UnsupportedOperationException if FEATURE_NFC is unavailable.
      */
     public boolean deviceSupportsNfcSecure() {
-      if (!sHasNfcFeature) {
-        throw new UnsupportedOperationException();
-      }
-      try {
-        return sService.deviceSupportsNfcSecure();
-      } catch (RemoteException e) {
-        attemptDeadServiceRecovery(e);
-        return false;
-      }
+        if (!sHasNfcFeature) {
+            throw new UnsupportedOperationException();
+        }
+        try {
+            return sService.deviceSupportsNfcSecure();
+        } catch (RemoteException e) {
+            attemptDeadServiceRecovery(e);
+            return false;
+        }
     }
 
     /**
@@ -1681,15 +1728,15 @@ public final class NfcAdapter {
      *         Secure NFC functionality. {@link #deviceSupportsNfcSecure}
      */
     public boolean isNfcSecureEnabled() {
-      if (!sHasNfcFeature) {
-        throw new UnsupportedOperationException();
-      }
-      try {
-        return sService.isNfcSecureEnabled();
-      } catch (RemoteException e) {
-        attemptDeadServiceRecovery(e);
-        return false;
-      }
+        if (!sHasNfcFeature) {
+            throw new UnsupportedOperationException();
+        }
+        try {
+            return sService.isNfcSecureEnabled();
+        } catch (RemoteException e) {
+            attemptDeadServiceRecovery(e);
+            return false;
+        }
     }
 
     /**
@@ -1760,6 +1807,9 @@ public final class NfcAdapter {
         synchronized (NfcAdapter.class) {
             if (!sHasNfcFeature) {
                 throw new UnsupportedOperationException();
+            }
+            if (!sHasBeamFeature) {
+                return false;
             }
         }
         try {
@@ -1958,6 +2008,7 @@ public final class NfcAdapter {
     /**
      * @hide
      */
+    @UnsupportedAppUsage
     public INfcAdapterExtras getNfcAdapterExtrasInterface() {
         if (mContext == null) {
             throw new UnsupportedOperationException("You need a context on NfcAdapter to use the "

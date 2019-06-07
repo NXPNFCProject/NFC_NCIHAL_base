@@ -90,17 +90,16 @@ public final class NfcFServiceInfo implements Parcelable {
      * @hide
      */
     public NfcFServiceInfo(ResolveInfo info, String description,
-                           String systemCode, String dynamicSystemCode,
-                           String nfcid2, String dynamicNfcid2, int uid,
-                           String t3tPmm) {
-      this.mService = info;
-      this.mDescription = description;
-      this.mSystemCode = systemCode;
-      this.mDynamicSystemCode = dynamicSystemCode;
-      this.mNfcid2 = nfcid2;
-      this.mDynamicNfcid2 = dynamicNfcid2;
-      this.mUid = uid;
-      this.mT3tPmm = t3tPmm;
+            String systemCode, String dynamicSystemCode, String nfcid2, String dynamicNfcid2,
+            int uid, String t3tPmm) {
+        this.mService = info;
+        this.mDescription = description;
+        this.mSystemCode = systemCode;
+        this.mDynamicSystemCode = dynamicSystemCode;
+        this.mNfcid2 = nfcid2;
+        this.mDynamicNfcid2 = dynamicNfcid2;
+        this.mUid = uid;
+        this.mT3tPmm = t3tPmm;
     }
 
     public NfcFServiceInfo(PackageManager pm, ResolveInfo info)
@@ -170,15 +169,13 @@ public final class NfcFServiceInfo implements Parcelable {
                         nfcid2 = null;
                     }
                     a.recycle();
-                } else if (eventType == XmlPullParser.START_TAG &&
-                           tagName.equals("t3tPmm-filter") && t3tPmm == null) {
-                  final TypedArray a = res.obtainAttributes(
-                      attrs, com.android.internal.R.styleable.T3tPmmFilter);
-                  t3tPmm =
-                      a.getString(
-                           com.android.internal.R.styleable.T3tPmmFilter_name)
-                          .toUpperCase();
-                  a.recycle();
+                } else if (eventType == XmlPullParser.START_TAG && tagName.equals("t3tPmm-filter")
+                        && t3tPmm == null) {
+                    final TypedArray a = res.obtainAttributes(attrs,
+                            com.android.internal.R.styleable.T3tPmmFilter);
+                    t3tPmm = a.getString(
+                            com.android.internal.R.styleable.T3tPmmFilter_name).toUpperCase();
+                    a.recycle();
                 }
             }
             mSystemCode = (systemCode == null ? "NULL" : systemCode);
