@@ -472,7 +472,9 @@ public final class NfcFCardEmulation {
 
     void recoverService() {
         NfcAdapter adapter = NfcAdapter.getDefaultAdapter(mContext);
-        sService = adapter.getNfcFCardEmulationService();
+        if (adapter != null) {
+            sService = adapter.getNfcFCardEmulationService();
+        }
     }
 
 }

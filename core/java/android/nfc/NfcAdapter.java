@@ -1719,8 +1719,10 @@ public final class NfcAdapter {
     @SystemApi
     @RequiresPermission(android.Manifest.permission.WRITE_SECURE_SETTINGS)
     public boolean enableSecureNfc(boolean enable) {
-        if (!sHasNfcFeature) {
-            throw new UnsupportedOperationException();
+        synchronized (NfcAdapter.class) {
+            if (!sHasNfcFeature) {
+                throw new UnsupportedOperationException();
+            }
         }
         try {
             return sService.setNfcSecure(enable);
@@ -1737,8 +1739,10 @@ public final class NfcAdapter {
      * @throws UnsupportedOperationException if FEATURE_NFC is unavailable.
      */
     public boolean isSecureNfcSupported() {
-        if (!sHasNfcFeature) {
-            throw new UnsupportedOperationException();
+        synchronized (NfcAdapter.class) {
+            if (!sHasNfcFeature) {
+                throw new UnsupportedOperationException();
+            }
         }
         try {
             return sService.deviceSupportsNfcSecure();
@@ -1757,8 +1761,10 @@ public final class NfcAdapter {
      *         Secure NFC functionality. {@link #isSecureNfcSupported}
      */
     public boolean isSecureNfcEnabled() {
-        if (!sHasNfcFeature) {
-            throw new UnsupportedOperationException();
+        synchronized (NfcAdapter.class) {
+            if (!sHasNfcFeature) {
+                throw new UnsupportedOperationException();
+            }
         }
         try {
             return sService.isNfcSecureEnabled();
@@ -1776,8 +1782,10 @@ public final class NfcAdapter {
     @SystemApi
     @RequiresPermission(android.Manifest.permission.WRITE_SECURE_SETTINGS)
     public boolean enableNdefPush() {
-        if (!sHasNfcFeature) {
-            throw new UnsupportedOperationException();
+        synchronized (NfcAdapter.class) {
+            if (!sHasNfcFeature) {
+                throw new UnsupportedOperationException();
+            }
         }
         try {
             return sService.enableNdefPush();
