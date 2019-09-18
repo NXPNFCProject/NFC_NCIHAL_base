@@ -118,12 +118,11 @@ public final class Reader {
         if (!mService.isConnected()) {
             throw new IllegalStateException("service is not connected");
         }
-        synchronized (mLock) {
-            try {
-                return mReader.isSecureElementPresent();
-            } catch (RemoteException e) {
-                throw new IllegalStateException("Error in isSecureElementPresent()");
-            }
+
+        try {
+            return mReader.isSecureElementPresent();
+        } catch (RemoteException e) {
+            throw new IllegalStateException("Error in isSecureElementPresent()");
         }
     }
 
