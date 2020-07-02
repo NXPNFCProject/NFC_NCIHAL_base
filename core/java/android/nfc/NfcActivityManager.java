@@ -16,7 +16,7 @@
 
 package android.nfc;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.app.Activity;
 import android.app.Application;
 import android.content.ContentProvider;
