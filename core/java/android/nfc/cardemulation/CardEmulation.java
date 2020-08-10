@@ -407,7 +407,7 @@ public final class CardEmulation {
      * exists on the device.
      *
      * @param service The component name of the service
-     * @param offHostSecureElement Secure Element to register the AID to
+     * @param offHostSecureElement Secure Element to register the AID to.
      * @return whether the registration was successful.
      */
     public boolean setOffHostForService(@NonNull ComponentName service,
