@@ -134,7 +134,7 @@ public class ApduServiceInfo implements Parcelable {
      * @hide
      */
     @UnsupportedAppUsage
-    public ApduServiceInfo(ResolveInfo info, String description,
+    public ApduServiceInfo(ResolveInfo info, boolean onHost, String description,
             ArrayList<AidGroup> staticAidGroups, ArrayList<AidGroup> dynamicAidGroups,
             boolean requiresUnlock, int bannerResource, int uid,
             String settingsActivityName, String offHost, String staticOffHost) {
@@ -144,7 +144,7 @@ public class ApduServiceInfo implements Parcelable {
         this.mDynamicAidGroups = new HashMap<String, AidGroup>();
         this.mOffHostName = offHost;
         this.mStaticOffHostName = staticOffHost;
-        this.mOnHost = (offHost == null);
+        this.mOnHost = onHost;
         this.mRequiresDeviceUnlock = requiresUnlock;
         for (AidGroup aidGroup : staticAidGroups) {
             this.mStaticAidGroups.put(aidGroup.category, aidGroup);
@@ -560,7 +560,7 @@ public class ApduServiceInfo implements Parcelable {
     };
 
     @UnsupportedAppUsage
-    public static final Parcelable.Creator<ApduServiceInfo> CREATOR =
+    public static final @android.annotation.NonNull Parcelable.Creator<ApduServiceInfo> CREATOR =
             new Parcelable.Creator<ApduServiceInfo>() {
         @Override
         public ApduServiceInfo createFromParcel(Parcel source) {
@@ -583,7 +583,7 @@ public class ApduServiceInfo implements Parcelable {
             int bannerResource = source.readInt();
             int uid = source.readInt();
             String settingsActivityName = source.readString();
-            return new ApduServiceInfo(info, description, staticAidGroups,
+            return new ApduServiceInfo(info, onHost, description, staticAidGroups,
                     dynamicAidGroups, requiresUnlock, bannerResource, uid,
                     settingsActivityName, offHostName, staticOffHostName);
         }
@@ -601,8 +601,8 @@ public class ApduServiceInfo implements Parcelable {
             pw.println("    On Host Service");
         } else {
             pw.println("    Off-host Service");
-            pw.println("        " + "Current off-host SE" + mOffHostName
-                    + " static off-host: " + mOffHostName);
+            pw.println("        " + "Current off-host SE:" + mOffHostName
+                    + " static off-host:" + mStaticOffHostName);
         }
         pw.println("    Static off-host Secure Element:");
         pw.println("    Static AID groups:");
