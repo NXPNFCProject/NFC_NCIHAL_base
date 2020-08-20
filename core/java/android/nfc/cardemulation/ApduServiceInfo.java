@@ -457,7 +457,7 @@ public class ApduServiceInfo implements Parcelable {
      * @param  offHost  Secure Element to set. Only accept strings with prefix SIM or prefix eSE.
      *                  Ref: GSMA TS.26 - NFC Handset Requirements
      *                  TS26_NFC_REQ_069: For UICC, Secure Element Name SHALL be SIM[smartcard slot]
-     *                                    (e.g. SIM/SIM1, SIM2… SIMn).
+     *                                    (e.g. SIM/SIM1, SIM2... SIMn).
      *                  TS26_NFC_REQ_070: For embedded SE, Secure Element Name SHALL be eSE[number]
      *                                    (e.g. eSE/eSE1, eSE2, etc.).
      */
