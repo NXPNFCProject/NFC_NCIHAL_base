@@ -13,26 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- /******************************************************************************
- *
-  *
-  *  The original Work has been changed by NXP.
-  *
-  *  Copyright 2015-2020 NXP
-  *
-  *  Licensed under the Apache License, Version 2.0 (the "License");
-  *  you may not use this file except in compliance with the License.
-  *  You may obtain a copy of the License at
-  *
-  *  http://www.apache.org/licenses/LICENSE-2.0
-  *
-  *  Unless required by applicable law or agreed to in writing, software
-  *  distributed under the License is distributed on an "AS IS" BASIS,
-  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  *  See the License for the specific language governing permissions and
-  *  limitations under the License.
- *
- ******************************************************************************/
 
 package android.nfc.cardemulation;
 
@@ -68,24 +48,24 @@ import java.util.Map;
 /**
  * @hide
  */
-public class ApduServiceInfo implements Parcelable {
+public final class ApduServiceInfo implements Parcelable {
     static final String TAG = "ApduServiceInfo";
 
     /**
      * The service that implements this
      */
     @UnsupportedAppUsage
-    protected ResolveInfo mService;
+    final ResolveInfo mService;
 
     /**
      * Description of the service
      */
-    protected String mDescription;
+    final String mDescription;
 
     /**
      * Whether this service represents AIDs running on the host CPU
      */
-    protected boolean mOnHost;
+    final boolean mOnHost;
 
     /**
      * Offhost reader name.
@@ -103,18 +83,18 @@ public class ApduServiceInfo implements Parcelable {
      * Mapping from category to static AID group
      */
     @UnsupportedAppUsage
-    protected HashMap<String, AidGroup> mStaticAidGroups;
+    final HashMap<String, AidGroup> mStaticAidGroups;
 
     /**
      * Mapping from category to dynamic AID group
      */
     @UnsupportedAppUsage
-    protected HashMap<String, AidGroup> mDynamicAidGroups;
+    final HashMap<String, AidGroup> mDynamicAidGroups;
 
     /**
      * Whether this service should only be started when the device is unlocked.
      */
-    protected boolean mRequiresDeviceUnlock;
+    final boolean mRequiresDeviceUnlock;
 
     /**
      * Whether this service should only be started when the device is screen on.
@@ -124,17 +104,17 @@ public class ApduServiceInfo implements Parcelable {
     /**
      * The id of the service banner specified in XML.
      */
-    protected int mBannerResourceId;
+    final int mBannerResourceId;
 
     /**
      * The uid of the package the service belongs to
      */
-    protected int mUid;
+    final int mUid;
 
     /**
      * Settings Activity for this service
      */
-    protected String mSettingsActivityName;
+    final String mSettingsActivityName;
 
     /**
      * @hide
@@ -491,7 +471,7 @@ public class ApduServiceInfo implements Parcelable {
      * @param  offHost  Secure Element to set. Only accept strings with prefix SIM or prefix eSE.
      *                  Ref: GSMA TS.26 - NFC Handset Requirements
      *                  TS26_NFC_REQ_069: For UICC, Secure Element Name SHALL be SIM[smartcard slot]
-     *                                    (e.g. SIM/SIM1, SIM2... SIMn).
+     *                                    (e.g. SIM/SIM1, SIM2… SIMn).
      *                  TS26_NFC_REQ_070: For embedded SE, Secure Element Name SHALL be eSE[number]
      *                                    (e.g. eSE/eSE1, eSE2, etc.).
      */
