@@ -43,7 +43,7 @@ import java.util.List;
  *
  * @hide
  */
-public class AidGroup implements Parcelable {
+public final class AidGroup implements Parcelable {
     /**
      * The maximum number of AIDs that can be present in any one group.
      */
@@ -52,11 +52,11 @@ public class AidGroup implements Parcelable {
     static final String TAG = "AidGroup";
 
     @UnsupportedAppUsage
-    protected List<String> aids;
+    final List<String> aids;
     @UnsupportedAppUsage
-    protected String category;
+    final String category;
     @UnsupportedAppUsage
-    protected String description;
+    final String description;
 
     /**
      * Creates a new AidGroup object.
@@ -89,7 +89,7 @@ public class AidGroup implements Parcelable {
     }
 
     @UnsupportedAppUsage
-    public AidGroup(String category, String description) {
+    AidGroup(String category, String description) {
         this.aids = new ArrayList<String>();
         this.category = category;
         this.description = description;

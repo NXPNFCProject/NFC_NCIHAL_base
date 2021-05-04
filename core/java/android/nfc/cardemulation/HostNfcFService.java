@@ -13,25 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/******************************************************************************
-*
-*  The original Work has been changed by NXP.
-*
-*  Licensed under the Apache License, Version 2.0 (the "License");
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*  http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*
-*  Copyright 2018 NXP
-*
-******************************************************************************/
 
 package android.nfc.cardemulation;
 
@@ -203,21 +184,25 @@ public abstract class HostNfcFService extends Service {
                 byte[] packet = dataBundle.getByteArray(KEY_DATA);
                 if (packet != null) {
                     byte[] responsePacket = processNfcFPacket(packet, null);
-                    if (mNfcService == null) {
-                        Log.e(TAG, "Response not sent; service was deactivated.");
-                        return;
+                    if (responsePacket != null) {
+                        if (mNfcService == null) {
+                            Log.e(TAG, "Response not sent; service was deactivated.");
+                            return;
+                        }
+                        Message responseMsg = Message.obtain(null, MSG_RESPONSE_PACKET);
+                        Bundle responseBundle = new Bundle();
+                        responseBundle.putByteArray(KEY_DATA, responsePacket);
+                        responseMsg.setData(responseBundle);
+                        responseMsg.replyTo = mMessenger;
+                        try {
+                            mNfcService.send(responseMsg);
+                        } catch (RemoteException e) {
+                            Log.e("TAG", "Response not sent; RemoteException calling into " +
+                                    "NfcService.");
+                        }
                     }
-                    Message responseMsg = Message.obtain(null, MSG_RESPONSE_PACKET);
-                    Bundle responseBundle = new Bundle();
-                    responseBundle.putByteArray(KEY_DATA, responsePacket);
-                    responseMsg.setData(responseBundle);
-                    responseMsg.replyTo = mMessenger;
-                    try {
-                        mNfcService.send(responseMsg);
-                    } catch (RemoteException e) {
-                        Log.e("TAG", "Response not sent; RemoteException calling into " +
-                                "NfcService.");
-                    }
+                } else {
+                    Log.e(TAG, "Received MSG_COMMAND_PACKET without data.");
                 }
                 break;
             case MSG_RESPONSE_PACKET:
