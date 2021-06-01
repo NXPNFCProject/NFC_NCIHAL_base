@@ -93,4 +93,8 @@ interface INfcAdapter
     boolean isNfcSecureEnabled();
     boolean deviceSupportsNfcSecure();
     boolean setNfcSecure(boolean enable);
+
+    boolean setAlwaysOn(boolean value);
+    boolean isAlwaysOnEnabled();
+    boolean isAlwaysOnSupported();
 }
