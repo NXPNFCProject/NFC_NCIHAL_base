@@ -158,6 +158,13 @@ public interface TagTechnology extends Closeable {
     public static final int NFC_BARCODE = 10;
 
     /**
+     * This technology is an instance of {@link NfcQ}.
+     * <p>Support for this technology type is mandatory.
+     * @hide
+     */
+    public static final int NFC_Q = 11;
+
+    /**
      * Get the {@link Tag} object backing this {@link TagTechnology} object.
      * @return the {@link Tag} backing this {@link TagTechnology} object.
      */

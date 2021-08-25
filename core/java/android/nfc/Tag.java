@@ -191,6 +191,9 @@ public final class Tag implements Parcelable {
                 case TagTechnology.NFC_BARCODE:
                     strings[i] = NfcBarcode.class.getName();
                     break;
+                case TagTechnology.NFC_Q:
+                    strings[i] = "NfcQ";
+                    break;
                 default:
                     throw new IllegalArgumentException("Unknown tech type " + techList[i]);
             }
