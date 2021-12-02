@@ -49,6 +49,7 @@ import android.content.pm.PackageManager;
 import android.nfc.INfcCardEmulation;
 import android.nfc.NfcAdapter;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.util.Log;
@@ -288,8 +289,8 @@ public final class CardEmulation {
         if (CATEGORY_PAYMENT.equals(category)) {
             boolean preferForeground = false;
             try {
-                preferForeground = Settings.Secure.getInt(mContext.getContentResolver(),
-                        Settings.Secure.NFC_PAYMENT_FOREGROUND) != 0;
+                preferForeground = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                        Settings.Secure.NFC_PAYMENT_FOREGROUND, UserHandle.myUserId()) != 0;
             } catch (SettingNotFoundException e) {
             }
             return preferForeground;
@@ -826,6 +827,28 @@ public final class CardEmulation {
     /**
      * @hide
      */
+    public boolean setDefaultForNextTap(int userId, ComponentName service) {
+        try {
+            return sService.setDefaultForNextTap(userId, service);
+        } catch (RemoteException e) {
+            // Try one more time
+            recoverService();
+            if (sService == null) {
+                Log.e(TAG, "Failed to recover CardEmulationService.");
+                return false;
+            }
+            try {
+                return sService.setDefaultForNextTap(userId, service);
+            } catch (RemoteException ee) {
+                Log.e(TAG, "Failed to reach CardEmulationService.");
+                return false;
+            }
+        }
+    }
+
+    /**
+     * @hide
+     */
     public boolean setDefaultForNextTap(ComponentName service) {
         try {
             return sService.setDefaultForNextTap(mContext.getUserId(), service);
@@ -860,6 +883,28 @@ public final class CardEmulation {
             }
             try {
                 return sService.getServices(mContext.getUserId(), category);
+            } catch (RemoteException ee) {
+                Log.e(TAG, "Failed to reach CardEmulationService.");
+                return null;
+            }
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public List<ApduServiceInfo> getServices(String category, int userId) {
+        try {
+            return sService.getServices(userId, category);
+        } catch (RemoteException e) {
+            // Try one more time
+            recoverService();
+            if (sService == null) {
+                Log.e(TAG, "Failed to recover CardEmulationService.");
+                return null;
+            }
+            try {
+                return sService.getServices(userId, category);
             } catch (RemoteException ee) {
                 Log.e(TAG, "Failed to reach CardEmulationService.");
                 return null;
