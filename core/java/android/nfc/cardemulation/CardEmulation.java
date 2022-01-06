@@ -834,28 +834,6 @@ public final class CardEmulation {
     /**
      * @hide
      */
-    public boolean setDefaultForNextTap(int userId, ComponentName service) {
-        try {
-            return sService.setDefaultForNextTap(userId, service);
-        } catch (RemoteException e) {
-            // Try one more time
-            recoverService();
-            if (sService == null) {
-                Log.e(TAG, "Failed to recover CardEmulationService.");
-                return false;
-            }
-            try {
-                return sService.setDefaultForNextTap(userId, service);
-            } catch (RemoteException ee) {
-                Log.e(TAG, "Failed to reach CardEmulationService.");
-                return false;
-            }
-        }
-    }
-
-    /**
-     * @hide
-     */
     public boolean setDefaultForNextTap(ComponentName service) {
         try {
             return sService.setDefaultForNextTap(mContext.getUserId(), service);
@@ -868,6 +846,28 @@ public final class CardEmulation {
             }
             try {
                 return sService.setDefaultForNextTap(mContext.getUserId(), service);
+            } catch (RemoteException ee) {
+                Log.e(TAG, "Failed to reach CardEmulationService.");
+                return false;
+            }
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public boolean setDefaultForNextTap(int userId, ComponentName service) {
+        try {
+            return sService.setDefaultForNextTap(userId, service);
+        } catch (RemoteException e) {
+            // Try one more time
+            recoverService();
+            if (sService == null) {
+                Log.e(TAG, "Failed to recover CardEmulationService.");
+                return false;
+            }
+            try {
+                return sService.setDefaultForNextTap(userId, service);
             } catch (RemoteException ee) {
                 Log.e(TAG, "Failed to reach CardEmulationService.");
                 return false;
