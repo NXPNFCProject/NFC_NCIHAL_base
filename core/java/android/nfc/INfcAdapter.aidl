@@ -51,6 +51,7 @@ import android.nfc.INfcFCardEmulation;
 import android.nfc.INfcUnlockHandler;
 import android.nfc.ITagRemovedCallback;
 import android.nfc.INfcDta;
+import android.nfc.NfcAntennaInfo;
 import android.os.Bundle;
 
 /**
@@ -94,6 +95,7 @@ interface INfcAdapter
     boolean isNfcSecureEnabled();
     boolean deviceSupportsNfcSecure();
     boolean setNfcSecure(boolean enable);
+    NfcAntennaInfo getNfcAntennaInfo();
 
     boolean setControllerAlwaysOn(boolean value);
     boolean isControllerAlwaysOn();
