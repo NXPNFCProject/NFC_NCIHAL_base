@@ -27,7 +27,7 @@ import android.os.Parcelable;
  */
 public final class AvailableNfcAntenna implements Parcelable {
     /**
-     * Location of the antenna on the Y axis in millimeters.
+     * Location of the antenna on the X axis in millimeters.
      * 0 is the bottom-left when the user is facing the screen
      * and the device orientation is Portrait.
      */
