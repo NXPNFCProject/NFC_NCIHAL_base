@@ -63,8 +63,6 @@ interface INfcAdapter
     INfcFCardEmulation getNfcFCardEmulationInterface();
     INfcAdapterExtras getNfcAdapterExtrasInterface(in String pkg);
     INfcDta getNfcDtaInterface(in String pkg);
-    IBinder getNfcAdapterVendorInterface(in String vendor);
-
     int getState();
     boolean disable(boolean saveState);
     boolean enable();
@@ -101,4 +99,5 @@ interface INfcAdapter
     Map getTagIntentAppPreferenceForUser(int userId);
     @JavaPassthrough(annotation="@android.annotation.RequiresPermission(android.Manifest.permission.WRITE_SECURE_SETTINGS)")
     int setTagIntentAppPreferenceForUser(int userId, String pkg, boolean allow);
+    IBinder getNfcAdapterVendorInterface(in String vendor);
 }
