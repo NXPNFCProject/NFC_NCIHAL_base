@@ -104,5 +104,7 @@ interface INfcAdapter
     boolean isReaderOptionSupported();
     @JavaPassthrough(annotation="@android.annotation.RequiresPermission(android.Manifest.permission.WRITE_SECURE_SETTINGS)")
     boolean enableReaderOption(boolean enable);
+    boolean isObserveModeSupported();
+    boolean setObserveMode(boolean enabled);
     IBinder getNfcAdapterVendorInterface(in String vendor);
 }
