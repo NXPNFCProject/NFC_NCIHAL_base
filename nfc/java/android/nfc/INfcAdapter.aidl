@@ -44,6 +44,7 @@ import android.nfc.TechListParcel;
 import android.nfc.IAppCallback;
 import android.nfc.INfcAdapterExtras;
 import android.nfc.INfcControllerAlwaysOnListener;
+import android.nfc.INfcVendorNciCallback;
 import android.nfc.INfcTag;
 import android.nfc.INfcCardEmulation;
 import android.nfc.INfcFCardEmulation;
@@ -107,5 +108,8 @@ interface INfcAdapter
     boolean isObserveModeSupported();
     boolean setObserveMode(boolean enabled);
     void updateDiscoveryTechnology(IBinder b, int pollFlags, int listenFlags);
+    int sendVendorNciMessage(int mt, int gid, int oid, in byte[] payload);
+    void registerVendorExtensionCallback(in INfcVendorNciCallback callbacks);
+    void unregisterVendorExtensionCallback(in INfcVendorNciCallback callbacks);
     IBinder getNfcAdapterVendorInterface(in String vendor);
 }
