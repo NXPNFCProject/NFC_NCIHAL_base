@@ -105,7 +105,7 @@ package android.nfc {
     field @FlaggedApi("android.nfc.enable_nfc_set_discovery_tech") public static final int FLAG_READER_KEEP = -2147483648; // 0x80000000
     field public static final int FLAG_READER_NFC_A = 1; // 0x1
     field public static final int FLAG_READER_NFC_B = 2; // 0x2
-    field public static final int FLAG_READER_NFC_BARCODE = 16; // 0x10
+    field public static final int FLAG_READER_NFC_BARCODE = 32; // 0x20
     field public static final int FLAG_READER_NFC_F = 4; // 0x4
     field public static final int FLAG_READER_NFC_V = 8; // 0x8
     field public static final int FLAG_READER_NO_PLATFORM_SOUNDS = 256; // 0x100
