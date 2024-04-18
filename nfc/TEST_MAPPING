@@ -5,6 +5,10 @@
     },
     {
       "name": "CtsNfcTestCases"
+    },
+    {
+      "name": "CtsNdefTestCases"
+    }
     }
   ]
 }
