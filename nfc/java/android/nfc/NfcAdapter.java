@@ -1865,10 +1865,7 @@ public final class NfcAdapter {
                      throw new UnsupportedOperationException();
                  }
              }
-             mNfcActivityManager.enableReaderMode(activity, null, pollTechnology, null);
-             return;
-         }
-         if (pollTechnology == FLAG_READER_DISABLE) {
+        } else if (pollTechnology == FLAG_READER_DISABLE) {
              synchronized (sLock) {
                  if (!sHasCeFeature) {
                      throw new UnsupportedOperationException();
