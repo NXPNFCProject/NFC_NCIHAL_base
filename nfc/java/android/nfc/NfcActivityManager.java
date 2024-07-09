@@ -135,6 +135,7 @@ public final class NfcActivityManager extends IAppCallback.Stub
             readerModeFlags = 0;
             readerModeExtras = null;
             token = null;
+
             mPollTech = NfcAdapter.FLAG_USE_ALL_TECH;
             mListenTech = NfcAdapter.FLAG_USE_ALL_TECH;
         }
@@ -294,6 +295,7 @@ public final class NfcActivityManager extends IAppCallback.Stub
         Binder token;
         int pollTech;
         int listenTech;
+
         synchronized (NfcActivityManager.this) {
             NfcActivityState state = findActivityState(activity);
             if (DBG) Log.d(TAG, "onResume() for " + activity + " " + state);
@@ -302,6 +304,7 @@ public final class NfcActivityManager extends IAppCallback.Stub
             token = state.token;
             readerModeFlags = state.readerModeFlags;
             readerModeExtras = state.readerModeExtras;
+
             pollTech = state.mPollTech;
             listenTech = state.mListenTech;
         }
@@ -321,6 +324,7 @@ public final class NfcActivityManager extends IAppCallback.Stub
         Binder token;
         int pollTech;
         int listenTech;
+
         synchronized (NfcActivityManager.this) {
             NfcActivityState state = findActivityState(activity);
             if (DBG) Log.d(TAG, "onPause() for " + activity + " " + state);
@@ -328,6 +332,7 @@ public final class NfcActivityManager extends IAppCallback.Stub
             state.resumed = false;
             token = state.token;
             readerModeFlagsSet = state.readerModeFlags != 0;
+
             pollTech = state.mPollTech;
             listenTech = state.mListenTech;
         }
