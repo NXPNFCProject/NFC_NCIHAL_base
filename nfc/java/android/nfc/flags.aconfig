@@ -116,3 +116,11 @@ flag {
     description: "Enable NFC persistent log support"
     bug: "321310044"
 }
+
+flag {
+    name: "nfc_watchdog"
+    is_exported: true
+    namespace: "nfc"
+    description: "Enable watchdog for the NFC system process"
+    bug: "362937338"
+}
