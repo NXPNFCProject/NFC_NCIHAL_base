@@ -82,7 +82,7 @@ interface INfcAdapter
 
     void dispatch(in Tag tag);
 
-    void setReaderMode (IBinder b, IAppCallback callback, int flags, in Bundle extras);
+    void setReaderMode(IBinder b, IAppCallback callback, int flags, in Bundle extras, String pkg);
 
     void addNfcUnlockHandler(INfcUnlockHandler unlockHandler, in int[] techList);
     void removeNfcUnlockHandler(INfcUnlockHandler unlockHandler);
@@ -120,7 +120,7 @@ interface INfcAdapter
     void unregisterWlcStateListener(in INfcWlcStateListener listener);
     WlcListenerDeviceInfo getWlcListenerDeviceInfo();
 
-    void updateDiscoveryTechnology(IBinder b, int pollFlags, int listenFlags);
+    void updateDiscoveryTechnology(IBinder b, int pollFlags, int listenFlags, String pkg);
 
     void notifyPollingLoop(in PollingFrame frame);
     void notifyHceDeactivated();

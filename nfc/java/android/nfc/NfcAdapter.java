@@ -1749,7 +1749,8 @@ public final class NfcAdapter {
         }
         Binder token = new Binder();
         int flags = enable ? ENABLE_POLLING_FLAGS : DISABLE_POLLING_FLAGS;
-        callService(() -> sService.setReaderMode(token, null, flags, null));
+        callService(() -> sService.setReaderMode(
+                token, null, flags, null, mContext.getPackageName()));
     }
 
     /**
@@ -1822,7 +1823,8 @@ public final class NfcAdapter {
                 || (listenTechnology & FLAG_SET_DEFAULT_TECH) == FLAG_SET_DEFAULT_TECH)) {
             Binder token = new Binder();
             callService( () ->
-                sService.updateDiscoveryTechnology(token, pollTechnology, listenTechnology));
+                    sService.updateDiscoveryTechnology(
+                            token, pollTechnology, listenTechnology, mContext.getPackageName()));
         } else {
             mNfcActivityManager.setDiscoveryTech(activity, pollTechnology, listenTechnology);
         }
