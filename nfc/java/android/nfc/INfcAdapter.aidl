@@ -134,4 +134,5 @@ interface INfcAdapter
     void setScreenState();
     void checkFirmware();
     IBinder getNfcAdapterVendorInterface(in String vendor);
+    List<String> fetchActiveNfceeList();
 }

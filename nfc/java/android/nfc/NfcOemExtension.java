@@ -29,7 +29,8 @@ import android.os.RemoteException;
 import android.os.ResultReceiver;
 import android.util.Log;
 
-
+import java.util.ArrayList;
+import java.util.List;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.concurrent.ExecutionException;
@@ -383,6 +384,19 @@ public final class NfcOemExtension {
             throw new UnsupportedOperationException();
         }
         NfcAdapter.callService(() -> NfcAdapter.sService.setControllerAlwaysOn(mode));
+    }
+
+    /**
+     * Get the Active NFCEE (NFC Execution Environment) List
+     *
+     * @return List of activated secure elements on success
+     *         which can contain "eSE" and "UICC", otherwise empty list.
+     */
+    @NonNull
+    @FlaggedApi(Flags.FLAG_NFC_OEM_EXTENSION)
+    public List<String> getActiveNfceeList() {
+        return NfcAdapter.callServiceReturn(() ->
+            NfcAdapter.sService.fetchActiveNfceeList(), new ArrayList<String>());
     }
 
     private final class NfcOemExtensionCallback extends INfcOemExtensionCallback.Stub {
