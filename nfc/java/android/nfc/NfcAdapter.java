@@ -577,6 +577,18 @@ public final class NfcAdapter {
     @Retention(RetentionPolicy.SOURCE)
     public @interface TagIntentAppPreferenceResult {}
 
+    /**
+     * Mode Type for {@link NfcOemExtension#setControllerAlwaysOn(int)}.
+     * @hide
+     */
+    public static final int CONTROLLER_ALWAYS_ON_MODE_DEFAULT = 1;
+
+    /**
+     * Mode Type for {@link NfcOemExtension#setControllerAlwaysOn(int)}.
+     * @hide
+     */
+    public static final int CONTROLLER_ALWAYS_ON_DISABLE = 0;
+
     // Guarded by sLock
     static boolean sIsInitialized = false;
     static boolean sHasNfcFeature;
@@ -2343,7 +2355,8 @@ public final class NfcAdapter {
      * FEATURE_NFC_HOST_CARD_EMULATION, FEATURE_NFC_HOST_CARD_EMULATION_NFCF,
      * FEATURE_NFC_OFF_HOST_CARD_EMULATION_UICC and FEATURE_NFC_OFF_HOST_CARD_EMULATION_ESE
      * are unavailable
-     * @return void
+     * @return true if feature is supported by the device and operation has bee initiated,
+     * false if the feature is not supported by the device.
      * @hide
      */
     @SystemApi
@@ -2352,8 +2365,13 @@ public final class NfcAdapter {
         if (!sHasNfcFeature && !sHasCeFeature) {
             throw new UnsupportedOperationException();
         }
-        return callServiceReturn(() ->  sService.setControllerAlwaysOn(value), false);
-
+        int mode = value ? CONTROLLER_ALWAYS_ON_MODE_DEFAULT : CONTROLLER_ALWAYS_ON_DISABLE;
+        try {
+            callService(() -> sService.setControllerAlwaysOn(mode));
+        } catch (UnsupportedOperationException e) {
+            return false;
+        }
+        return true;
     }
 
     /**
