@@ -93,7 +93,7 @@ interface INfcAdapter
     boolean setNfcSecure(boolean enable);
     NfcAntennaInfo getNfcAntennaInfo();
 
-    void setControllerAlwaysOn(int mode);
+    boolean setControllerAlwaysOn(boolean value);
     boolean isControllerAlwaysOn();
     boolean isControllerAlwaysOnSupported();
     void registerControllerAlwaysOnListener(in INfcControllerAlwaysOnListener listener);
