@@ -135,4 +135,7 @@ interface INfcAdapter
     void checkFirmware();
     IBinder getNfcAdapterVendorInterface(in String vendor);
     List<String> fetchActiveNfceeList();
+    void triggerInitialization();
+    boolean getSettingStatus();
+    boolean isTagPresent();
 }
