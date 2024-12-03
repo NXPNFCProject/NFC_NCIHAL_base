@@ -309,7 +309,7 @@ public final class NfcOemExtension {
 
 
     /**
-     * Mode Type for {@link #setControllerAlwaysOn(int)}.
+     * Mode Type for {@link #setControllerAlwaysOnMode(int)}.
      * Enables the controller in default mode when NFC is disabled (existing API behavior).
      * works same as {@link NfcAdapter#setControllerAlwaysOn(boolean)}.
      * @hide
@@ -319,7 +319,7 @@ public final class NfcOemExtension {
     public static final int ENABLE_DEFAULT = NfcAdapter.CONTROLLER_ALWAYS_ON_MODE_DEFAULT;
 
     /**
-     * Mode Type for {@link #setControllerAlwaysOn(int)}.
+     * Mode Type for {@link #setControllerAlwaysOnMode(int)}.
      * Enables the controller in transparent mode when NFC is disabled.
      * @hide
      */
@@ -328,7 +328,7 @@ public final class NfcOemExtension {
     public static final int ENABLE_TRANSPARENT = 2;
 
     /**
-     * Mode Type for {@link #setControllerAlwaysOn(int)}.
+     * Mode Type for {@link #setControllerAlwaysOnMode(int)}.
      * Enables the controller and initializes and enables the EE subsystem when NFC is disabled.
      * @hide
      */
@@ -337,7 +337,7 @@ public final class NfcOemExtension {
     public static final int ENABLE_EE = 3;
 
     /**
-     * Mode Type for {@link #setControllerAlwaysOn(int)}.
+     * Mode Type for {@link #setControllerAlwaysOnMode(int)}.
      * Disable the Controller Always On Mode.
      * works same as {@link NfcAdapter#setControllerAlwaysOn(boolean)}.
      * @hide
@@ -347,7 +347,7 @@ public final class NfcOemExtension {
     public static final int DISABLE = NfcAdapter.CONTROLLER_ALWAYS_ON_DISABLE;
 
     /**
-     * Possible controller modes for {@link #setControllerAlwaysOn(int)}.
+     * Possible controller modes for {@link #setControllerAlwaysOnMode(int)}.
      *
      * @hide
      */
@@ -487,6 +487,9 @@ public final class NfcOemExtension {
      * <p>This call is asynchronous, register listener {@link NfcAdapter.ControllerAlwaysOnListener}
      * by {@link NfcAdapter#registerControllerAlwaysOnListener} to find out when the operation is
      * complete.
+     * <p> Note: This adds more always on modes on top of existing
+     * {@link NfcAdapter#setControllerAlwaysOn(boolean)} API which can be used to set the NFCC in
+     * only {@link #ENABLE_DEFAULT} and {@link #DISABLE} modes.
      * @param mode one of {@link ControllerMode} modes
      * @throws UnsupportedOperationException if
      *   <li> if FEATURE_NFC, FEATURE_NFC_HOST_CARD_EMULATION, FEATURE_NFC_HOST_CARD_EMULATION_NFCF,
@@ -494,11 +497,12 @@ public final class NfcOemExtension {
      *   are unavailable </li>
      *   <li> if the feature is unavailable @see NfcAdapter#isNfcControllerAlwaysOnSupported() </li>
      * @hide
+     * @see NfcAdapter#setControllerAlwaysOn(boolean)
      */
     @SystemApi
     @FlaggedApi(Flags.FLAG_NFC_OEM_EXTENSION)
     @RequiresPermission(android.Manifest.permission.NFC_SET_CONTROLLER_ALWAYS_ON)
-    public void setControllerAlwaysOn(@ControllerMode int mode) {
+    public void setControllerAlwaysOnMode(@ControllerMode int mode) {
         if (!NfcAdapter.sHasNfcFeature && !NfcAdapter.sHasCeFeature) {
             throw new UnsupportedOperationException();
         }
