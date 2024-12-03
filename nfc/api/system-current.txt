@@ -96,6 +96,7 @@ package android.nfc {
     method public void onLaunchHceTapAgainDialog(@NonNull android.nfc.cardemulation.ApduServiceInfo, @NonNull String);
     method public void onNdefMessage(@NonNull android.nfc.Tag, @NonNull android.nfc.NdefMessage, @NonNull java.util.function.Consumer<java.lang.Boolean>);
     method public void onNdefRead(@NonNull java.util.function.Consumer<java.lang.Boolean>);
+    method public void onReaderOptionChanged(boolean);
     method public void onRfDiscoveryStarted(boolean);
     method public void onRfFieldActivated(boolean);
     method public void onRoutingChanged();
