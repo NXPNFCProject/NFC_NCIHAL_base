@@ -2044,7 +2044,8 @@ public final class NfcAdapter {
         if (!sHasNfcFeature) {
             throw new UnsupportedOperationException();
         }
-        return callServiceReturn(() ->  sService.enableReaderOption(enable), false);
+        return callServiceReturn(() ->
+                sService.enableReaderOption(enable, mContext.getPackageName()), false);
 
     }
 
